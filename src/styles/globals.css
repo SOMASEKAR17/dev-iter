@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme{
+  --breakpoint-xs:480px;
   --font-zalando:"Zalando", "sans-serif";
   --font-exorts:"Exorts", "sans-serif";
 }
