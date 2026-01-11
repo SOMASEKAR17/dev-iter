@@ -21,6 +21,34 @@
 
 /* globals.css */
 
+/* Only applies to elements with .scroll-bar */
+.scroll-bar {
+  overflow: auto;
+}
+
+/* width of the scrollbar */
+.scroll-bar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* background of the scrollbar */
+.scroll-bar::-webkit-scrollbar-track {
+  background: #000;          /* black background */
+  border-radius: 999px;      /* fully rounded */
+}
+
+/* the draggable part */
+.scroll-bar::-webkit-scrollbar-thumb {
+  background: #fff;          /* white scroll head */
+  border-radius: 999px;      /* rounded thumb */
+}
+
+/* hover effect */
+.scroll-bar::-webkit-scrollbar-thumb:hover {
+  background: #e5e5e5;
+}
+
 
 /* ZalandoSansExpanded-Italic-VariableFont_wght
 ZalandoSansExpanded-VariableFont_wght */
