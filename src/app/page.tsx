@@ -6,6 +6,7 @@ import CardSwap, { Card } from '@/components/reactBites/cardSwap'
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useRouter } from 'next/navigation';
+import MagicBento from '@/components/reactBites/MagicBento'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -14,12 +15,32 @@ export default function HomePage() {
   const projectsSectionRef = useRef<HTMLDivElement>(null)
   const projectsTextRef = useRef<HTMLDivElement>(null)
   const heroSectionRef = useRef<HTMLDivElement>(null)
+  const skillsSectionRef = useRef<HTMLDivElement>(null)
+  const skillsTextRef = useRef<HTMLDivElement>(null)
+
   const router = useRouter(); 
 
   const fullText =
   "A passionate engineering student focused on building impactful web applications, scalable systems, and modern user experiences."
 
   const [typedText, setTypedText] = useState<string>("")
+
+  useEffect(() => {
+    if (!skillsSectionRef.current || !skillsTextRef.current) return
+
+    gsap.from(skillsTextRef.current, {
+      x: 250,          // 👉 comes from RIGHT
+      opacity: 0,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: skillsSectionRef.current,
+        start: "top 75%",
+        end: "top 20%",
+        scrub: true,
+      },
+    })
+  }, [])
+
 
   useEffect(() => {
     const video = videoRef.current
@@ -74,14 +95,6 @@ export default function HomePage() {
   }, [])
 
 
-
-
-  const handleVideoEnd = () => {
-    const video = videoRef.current
-    if (!video) return
-    video.pause()
-    video.currentTime = video.duration
-  }
 
   useEffect(() => {
     if (!projectsSectionRef.current || !projectsTextRef.current) return
@@ -143,7 +156,7 @@ export default function HomePage() {
       {/* ABOUT PREVIEW */}
       <section
         ref={projectsSectionRef}
-        className="mx-auto cursor-pointer hover:scale-102 ease-in duration-150 w-full max-w-400 mb-10"
+        className="xl:mx-auto px-10 cursor-pointer hover:scale-102 ease-in duration-150 w-full max-w-400 mb-10"
         onClick={()=>router.push('/projects')}
       >
         <div
@@ -153,12 +166,12 @@ export default function HomePage() {
           {/* SCROLL ANIMATED TEXT */}
           <div
             ref={projectsTextRef}
-            className="text-[30vw] left-[30%] absolute lg:top-30 xl:-top-35 md:left-10 font-exorts pointer-events-none select-none"
+            className="text-[30vw] left-[30%] sm:-top-15 absolute lg:top-30 xl:-top-35 md:left-10 font-exorts pointer-events-none select-none"
           >
             Projects
           </div>
 
-          <div className="absolute bottom-10 left-[50%] md:static">
+          <div className="absolute bottom-10 xs:-bottom-10 xs:left[60%] sm:-bottom-15 left-[50%] md:static">
             <CardSwap
               cardDistance={60}
               verticalDistance={70}
@@ -196,28 +209,54 @@ export default function HomePage() {
 
 
       {/* SKILLS PREVIEW */}
-      <section className="mx-auto max-w-5xl px-6 pb-24">
-        <h2 className="text-3xl font-semibold">Skills</h2>
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            "React",
-            "Next.js",
-            "TypeScript",
-            "Node.js",
-            "MongoDB",
-            "Tailwind",
-            "Prisma",
-            "ML Basics",
-          ].map((skill) => (
-            <div
-              key={skill}
-              className="rounded-xl bg-white/5 px-4 py-3 text-center text-sm hover:bg-white/10 transition"
-            >
-              {skill}
-            </div>
-          ))}
+      <section
+        ref={skillsSectionRef}
+        className="mx-auto max-w-400 px-10 pb-24"
+      >
+        <div className="border-4 relative overflow-hidden rounded-4xl flex flex-col lg:flex-row">
+
+          {/* SKILLS TEXT */}
+          <div
+            ref={skillsTextRef}
+            className="
+              font-exorts select-none pointer-events-none
+
+              /* text size */
+              text-[35vw] sm:text-[25vw] lg:text-[30vw]
+              leading-none
+
+              /* default (mobile → tablet) */
+              static w-full text-center mb-4
+
+              /* lg+ : floating to the right */
+              lg:absolute
+              lg:top-24
+              lg:-right-100
+            "
+          >
+            Skills
+          </div>
+
+          {/* GRID */}
+          <div className="w-full">
+            <MagicBento
+              textAutoHide={true}
+              enableStars={true}
+              enableSpotlight={true}
+              enableBorderGlow={true}
+              enableTilt={true}
+              enableMagnetism={true}
+              clickEffect={true}
+              spotlightRadius={300}
+              particleCount={12}
+              glowColor="7, 11, 24"
+            />
+          </div>
+
         </div>
       </section>
+
+
 
       {/* FOOTER */}
       <footer className="border-t border-white/10 py-10">
