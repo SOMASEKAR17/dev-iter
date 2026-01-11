@@ -92,17 +92,6 @@ export default function JourneyTimeline() {
   const progressRef = useRef<HTMLDivElement>(null)
   const iconRef = useRef<HTMLDivElement>(null)
 
-  const getRocketTravel = () => {
-    if (!lineRef.current) return 0
-
-    const isMobile = window.innerWidth < 1024
-
-    // shorter travel on mobile so it feels faster
-    return isMobile
-        ? lineRef.current.offsetHeight * 0.6
-        : lineRef.current.offsetHeight - 40
-    }
-
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -137,7 +126,7 @@ export default function JourneyTimeline() {
             if (!progressRef.current || !iconRef.current) return
 
             const progress = self.progress
-            const maxTravel = lineRef.current!.offsetHeight - 40
+            const maxTravel = lineRef.current!.offsetHeight - 30
 
             gsap.set(iconRef.current, {
                 y: progress * maxTravel,
@@ -150,25 +139,33 @@ export default function JourneyTimeline() {
 
       // FADE IN ITEMS (with type-based motion)
       gsap.utils.toArray<HTMLElement>(".timeline-item").forEach((el) => {
-        const type = el.getAttribute("data-type")
+          const side = el.getAttribute("data-side")
+          const isMobile = window.innerWidth < 1024
 
-        const fromX =
-          type === "hackathon" ? -60 :
-          type === "internship" ? 60 : 0
+          let fromX = 0
 
-        gsap.from(el, {
-          opacity: 0,
-          y: 40,
-          x: fromX,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            scrub: true,
-          },
+          if (isMobile) {
+            // ALL items come from right on mobile
+            fromX = 60
+          } else {
+            fromX = side === "left" ? -60 : 60
+          }
+
+          gsap.from(el, {
+            opacity: 0,
+            y: 40,
+            x: fromX,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              end: "top 60%",
+              scrub: true,
+            },
+          })
         })
-      })
+
     }, sectionRef)
 
     return () => ctx.revert()
@@ -177,7 +174,7 @@ export default function JourneyTimeline() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-black mx-auto max-w-7xl px-6"
+      className="relative bg-black mx-auto max-w-7xl px-6 pb-5"
     >
       {/* -------- TITLE -------- */}
       <h2 className="font-exorts text-center text-[20vw] lg:text-[10vw] mb-24">
@@ -192,6 +189,7 @@ export default function JourneyTimeline() {
             i % 2 === 0 ? (
               <div
                 key={i}
+                data-side="left"
                 data-type={item.type}
                 className="
                     timeline-item
@@ -228,6 +226,7 @@ export default function JourneyTimeline() {
             i % 2 !== 0 ? (
               <div
                 key={i}
+                data-side="right"
                 data-type={item.type}
                 className="
                     timeline-item
