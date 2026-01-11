@@ -7,6 +7,8 @@ import MagicBento from "@/components/reactBites/MagicBento"
 import HorizontalScroll from "@/components/custom/horizontalScroll"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import AboutSection from "@/components/custom/about"
+import JourneyTimeline from "@/components/custom/timeline"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -202,11 +204,14 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <AboutSection/>
+      <JourneyTimeline/>
 
       {/* HORIZONTAL SCROLL */}
       <section>
         <HorizontalScroll />
       </section>
+
 
     </main>
   )

@@ -16,7 +16,7 @@ const links = [
   { name: "Home", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Skills", href: "/skills" },
-  { name: "About", href: "/about" },
+  { name: "About", href: "/#about" },
   { name: "Contact", href: "/contact" },
 ]
 
@@ -27,6 +27,13 @@ export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [desktopWidth, setDesktopWidth] = useState(0)
+
+  const hiddenPaths = ["/login", "/admin", "/projects/"]
+
+  const shouldHideNavbar = hiddenPaths.some(path =>
+    pathname === path || pathname.startsWith(path)
+  )
+
 
 
   useEffect(() => {
@@ -99,7 +106,7 @@ export default function Navbar() {
 
 
   return (
-    <div className={`fixed  ${isMobile?"left-10 top-4":"left-1/2 -translate-x-1/2 top-4"} z-50`}>
+    <div className={`fixed ${shouldHideNavbar&&"hidden"}  ${isMobile?"left-10 top-4":"left-1/2 -translate-x-1/2 top-4"} z-50`}>
 
       {!isMobile && (
         <GlassSurface
