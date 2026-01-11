@@ -15,8 +15,9 @@ const GlassSurface = dynamic(
 const links = [
   { name: "Home", href: "/" },
   { name: "Projects", href: "/projects" },
+  { name: "Skills", href: "/skills" },
   { name: "About", href: "/about" },
-  { name: "Contact", href: "/contact" }
+  { name: "Contact", href: "/contact" },
 ]
 
 export default function Navbar() {
