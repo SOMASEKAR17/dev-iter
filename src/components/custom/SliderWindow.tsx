@@ -3,24 +3,24 @@ import { motion } from "framer-motion"
 
 const sliderImages = [
     {
-      src: "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?q=80&w=1200&auto=format&fit=crop",
-      alt: "Finance dashboard",
+      src: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238807/Screenshot_2026-01-12_223816_mcvnwq.png",
+      alt: "OCHI clone",
     },
     {
-      src: "https://images.unsplash.com/photo-1556155092-8707de31f9c4?q=80&w=1200&auto=format&fit=crop",
-      alt: "Startup workspace",
+      src: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238806/Screenshot_2026-01-12_223341_ydfj1u.png",
+      alt: "MOVIE vault",
     },
     {
-      src: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
-      alt: "Amazon",
+      src: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238819/Screenshot_2026-01-12_200557_knuk0n.png",
+      alt: "AGENCY website",
     },
     {
-      src: "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg",
-      alt: "Samsung",
+      src: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_223848_df2qyq.png",
+      alt: "OCHI clone",
     },
     {
-      src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop",
-      alt: "App showcase",
+      src: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238813/Screenshot_2026-01-12_223353_yszttn.png",
+      alt: "MOVIE vault",
     },
   ];
 
