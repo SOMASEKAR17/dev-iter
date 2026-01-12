@@ -3,123 +3,133 @@ import { NextResponse } from "next/server"
 export async function GET() {
   const projects = [
     {
-      id: "p1",
-      createdAt: "2025-01-12",
-      title: "Luxora Capital",
-      description:
-        "A full-stack finance management platform that helps users track spending, plan budgets, and analyze investments using real-time APIs.",
-      techstack: {
-        "Next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-        "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-        "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-        "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-        "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-        "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
-      },
-      gallery: [
-        "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1556155092-8707de31f9c4?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop"
-      ]
-    },
-    {
-      id: "p6",
-      createdAt: "2025-03-18",
-      title: "FintechX",
-      description:
-        "A modern fintech web app featuring SIP & EMI calculators, live financial news, and AI-powered financial assistance.",
-      techstack: {
-        "Next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-        "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-        "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-        "Firebase": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
-        "OpenAI": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openal/openal-original.svg"
-      },
-      gallery: [
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1581091870627-3f8a41c6f17a?q=80&w=1200&auto=format&fit=crop"
-      ]
-    },
-    {
-      id: "p2",
-      createdAt: "2025-01-12",
-      title: "Luxora Capital",
-      description:
-        "A full-stack finance management platform that helps users track spending, plan budgets, and analyze investments using real-time APIs.",
-      techstack: {
-        "Next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-        "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-        "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-        "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-        "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-        "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
-      },
-      gallery: [
-        "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1556742400-b5f7c5121f35?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1556742031-c6961e8560b0?q=80&w=1200&auto=format&fit=crop"
-      ]
-    },
-    {
-      id: "p3",
-      createdAt: "2025-01-12",
-      title: "Luxora Capital",
-      description:
-        "A full-stack finance management platform that helps users track spending, plan budgets, and analyze investments using real-time APIs.",
-      techstack: {
-        "Next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-        "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-        "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-        "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-        "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-        "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
-      },
-      gallery: [
-        "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop"
-      ]
-    },
-    {
-      id: "p4",
-      createdAt: "2025-01-12",
-      title: "Luxora Capital",
-      description:
-        "A full-stack finance management platform that helps users track spending, plan budgets, and analyze investments using real-time APIs.",
-      techstack: {
-        "Next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-        "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-        "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-        "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-        "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-        "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
-      },
-      gallery: [
-        "https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1200&auto=format&fit=crop"
-      ]
-    },
-    {
-      id: "p5",
-      createdAt: "2025-03-18",
-      title: "FintechX",
-      description:
-        "A modern fintech web app featuring SIP & EMI calculators, live financial news, and AI-powered financial assistance.",
-      techstack: {
-        "Next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-        "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-        "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-        "Firebase": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
-        "OpenAI": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openal/openal-original.svg"
-      },
-      gallery: [
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1581091870627-3f8a41c6f17a?q=80&w=1200&auto=format&fit=crop"
-      ]
-    }
+  "id": "p1",
+  "createdAt": "2026-01-12",
+  "title": "crowder.ai",
+  "description": "An AI-powered idea validation platform that evaluates how people may respond to a product or concept. It simulates audience reactions, analyzes sentiment, and predicts engagement levels to help founders and teams make better decisions before launch.",
+  "techstack": {
+    "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+    "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    "AI/ML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    "Three.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg"
+  },
+  "gallery": [
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238803/Screenshot_2026-01-12_201642_sej9ra.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238803/Screenshot_2026-01-12_203235_kfkhnk.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238803/Screenshot_2026-01-12_202957_fhkl97.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238806/Screenshot_2026-01-12_203307_maxfgi.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238801/Screenshot_2026-01-12_201652_cetdpu.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238801/Screenshot_2026-01-12_203131_pr48ab.png"
+  ]
+},{
+  "id": "p2",
+  "createdAt": "2026-01-12",
+  "title": "FintechX – AI-Powered Finance Management Platform",
+  "description": "FintechX is a smart finance management platform that helps users track expenses, manage investments, and plan savings using AI-driven insights. The system analyzes spending patterns, provides personalized financial suggestions, and presents data through clean, interactive dashboards for better decision-making.",
+  "techstack": {
+    "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+    "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    "Express.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+    "AI/ML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    "MongoDB": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
+  },
+  "gallery": [
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_222702_ck1dki.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238802/Screenshot_2026-01-12_222729_g2gdme.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238801/Screenshot_2026-01-12_222746_y9y52w.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238804/Screenshot_2026-01-12_222800_qtswov.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238802/Screenshot_2026-01-12_222812_rlz9ys.png",
+  ]
+},{
+  "id": "p3",
+  "createdAt": "2026-01-12",
+  "title": "iPhone 15 Flagship Product Page Clone",
+  "description": "A visually rich clone of Apple’s iPhone 15 product page featuring smooth carousels, premium UI animations, and an interactive 3D product viewer. The project recreates the flagship Apple experience with fluid transitions, responsive design, and immersive product exploration.",
+  "techstack": {
+    "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "Three.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+    "GSAP": "https://api.iconify.design/logos:greensock.svg",
+    "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+    "Vite": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg"
+  },
+  "gallery": [
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238817/Screenshot_2026-01-12_224004_pftirp.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238818/Screenshot_2026-01-12_224016_f8aur8.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238818/Screenshot_2026-01-12_224033_stgpy0.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238819/Screenshot_2026-01-12_224045_dpkwvc.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238823/Screenshot_2026-01-12_224102_lndwup.png"
+  ]
+}
+,{
+  "id": "p4",
+  "createdAt": "2026-01-12",
+  "title": "GoldLend Pro – ERP for Gold Loan Management",
+  "description": "A full-featured ERP application built to manage gold loan operations. It helps admins handle customers, loans, payments, operators, and reports from a single dashboard, improving efficiency and reducing manual work in lending businesses.",
+  "techstack": {
+    "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+    "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    "Express.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+    "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+  },
+  "gallery": [
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238815/Screenshot_2026-01-12_215242_yhlvj2.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238814/Screenshot_2026-01-12_220813_bv3axm.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238815/Screenshot_2026-01-12_220828_rwq2t8.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238815/Screenshot_2026-01-12_220846_ehlbw5.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238815/Screenshot_2026-01-12_220906_m53p8w.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238815/Screenshot_2026-01-12_220920_agcsdh.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238816/Screenshot_2026-01-12_220933_tqhq7i.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238816/Screenshot_2026-01-12_220948_limmqg.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238816/Screenshot_2026-01-12_221019_sonobo.png"
+  ]
+},{
+  "id": "p5",
+  "createdAt": "2026-01-12",
+  "title": "GenReal.ai – AI Security Platform (Internship Project)",
+  "description": "Worked as an intern at GenReal.ai, contributing to the development of an AI-powered deepfake detection platform. Built interactive dashboards that display deepfake probability, model confidence, and real-time processing insights, helping improve digital trust and online security.",
+  "techstack": {
+    "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+    "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    "Three.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+    "Python": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    "AI/ML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg"
+  },
+  "gallery": [
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238810/Screenshot_2026-01-12_203637_qj96vy.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238814/Screenshot_2026-01-12_203657_s43ai4.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238811/Screenshot_2026-01-12_203725_lrxkfz.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238812/Screenshot_2026-01-12_203735_oxmjty.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238812/Screenshot_2026-01-12_203746_hyr8wc.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238813/Screenshot_2026-01-12_203755_ailgeb.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238817/Screenshot_2026-01-12_203806_hipfpw.png"
+  ]
+},{
+  "id": "p6",
+  "createdAt": "2026-01-12",
+  "title": "Ecommerce Product Explorer",
+  "description": "A simple frontend eCommerce website that allows users to browse products, filter them by category and price, and view product details. This project was built as a CodeChef requirement task to demonstrate API integration and modern frontend development skills.",
+  "techstack": {
+    "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+    "Vite": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg",
+    "REST API": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
+  },
+  "gallery": [
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238810/Screenshot_2026-01-12_200817_sefjvo.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238806/Screenshot_2026-01-12_200912_ig9ny5.png",
+    "https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_200937_vlaaiu.png"
+  ]
+}
   ]
 
   return NextResponse.json(projects)

@@ -47,6 +47,24 @@ export default function HomePage() {
 
   const [typedText, setTypedText] = useState("")
 
+  const ProjectData:{
+    id:string;
+    title: string;
+    url: string;
+}[] = [{
+    "id":"1",
+    "title":"CROWDER.AI",
+    "url":"https://res.cloudinary.com/di97k34d0/image/upload/v1768238803/Screenshot_2026-01-12_201642_sej9ra.png"
+  },{
+    "id":"2",
+    "title":"FINTECH-X",
+    "url":"https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_222702_ck1dki.png"
+  },{
+    "id":"3",
+    "title":"GENREAL.AI",
+    "url":"https://res.cloudinary.com/di97k34d0/image/upload/v1768238810/Screenshot_2026-01-12_203637_qj96vy.png"
+  }]
+
   /* ---------------- GSAP ANIMATIONS ---------------- */
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -234,13 +252,13 @@ export default function HomePage() {
 
           <div className="absolute bottom-10 left-[50%] md:static">
             <CardSwap cardDistance={60} verticalDistance={70} delay={5000}>
-              {[1, 2, 3].map((i) => (
-                <Card key={i}>
+              {ProjectData.map((i) => (
+                <Card key={i.id}>
                   <div className="content text-center bg-zinc-900 rounded-t-xl py-2">
-                    CROWDER.AI
+                    {i.title}
                   </div>
                   <div className="imageholder h-80 w-full">
-                    <img src="crowder.png" className="object-cover h-full w-full" />
+                    <img src={i.url} className="object-cover h-full w-full" />
                   </div>
                 </Card>
               ))}
