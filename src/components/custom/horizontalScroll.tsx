@@ -78,7 +78,7 @@ const HorizontalScroll: React.FC = () => {
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full hidden md:block">
       <div className="racewrapper font-500 overflow-hidden bg-black text-white">
         <div
           ref={races}
