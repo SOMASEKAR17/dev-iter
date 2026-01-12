@@ -174,7 +174,7 @@ export default function JourneyTimeline() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-black mx-auto max-w-7xl px-6 pb-5"
+      className="relative bg-black mx-auto max-w-7xl px-6 pb-20 md:pb-5"
     >
       {/* -------- TITLE -------- */}
       <h2 className="font-exorts text-center text-[20vw] lg:text-[10vw] mb-24">

@@ -131,7 +131,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main className="relative font-zalando min-h-screen text-white overflow-hidden">
+    <main className="relative bg-black font-zalando min-h-screen text-white overflow-hidden">
 
       {/* HERO */}
       <div className="relative h-screen w-full pb-[30vh] sm:pb-0 bg-black overflow-hidden flex items-center justify-center">
@@ -221,7 +221,7 @@ export default function HomePage() {
       {/* PROJECTS */}
       <section
         ref={projectsSectionRef}
-        className="xl:mx-auto px-10 cursor-pointer hover:scale-102 ease-in duration-150 w-full max-w-400 mb-10"
+        className="xl:mx-auto px-10 cursor-pointer bg-black hover:scale-102 ease-in duration-150 w-full max-w-400 mb-10"
         onClick={() => router.push("/projects")}
       >
         <div className="border-4 h-100 md:h-137 rounded-4xl relative overflow-hidden">
@@ -253,7 +253,7 @@ export default function HomePage() {
       <section
         ref={skillsSectionRef}
         onClick={() => router.push("/skills")}
-        className="mx-auto max-w-400 cursor-pointer hover:scale-102 ease-in duration-150 px-10 pb-24"
+        className="mx-auto max-w-400 bg-black cursor-pointer hover:scale-102 ease-in duration-150 px-10 pb-24"
       >
         <div className="border-4 relative overflow-hidden rounded-4xl flex flex-col lg:flex-row">
 
