@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server"
 
+
+
 export async function GET() {
   const projects = [
     {
   "id": "p1",
   "createdAt": "2025-09-24",
   "title": "crowder.ai",
-  "link":"https://github.com/SOMASEKAR17/Crowder",
+  "link":{
+    "linkedIn":"https://www.linkedin.com/posts/somasekar-naidu-841646320_hackathon-productvalidation-webdev-activity-7416803731318554624-LC0M?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFFAuTEB-V8H8Y59NcUqLsy-P3ftYUUhmpQ",
+    "Github":"https://github.com/SOMASEKAR17/Crowder"
+  },
   "description": "An AI-powered idea validation platform that evaluates how people may respond to a product or concept. It simulates audience reactions, analyzes sentiment, and predicts engagement levels to help founders and teams make better decisions before launch.",
   "techstack": {
     "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",

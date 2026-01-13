@@ -123,7 +123,7 @@ export default function ProjectsPage() {
         >
           Projects
         </motion.h1>
-        <p className="mt-4 text-gray-400 max-w-2xl">
+        <p className="mt-4 md:text-lg text-gray-400 max-w-2xl">
           A selection of projects I've worked on, focusing on performance,
           scalability, and clean design.
         </p>
