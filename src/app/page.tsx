@@ -21,6 +21,19 @@ export default function HomePage() {
   const skillsSectionRef = useRef<HTMLDivElement>(null)
   const skillsTextRef = useRef<HTMLDivElement>(null)
   const socialsRef = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState<number>(0)
+
+    useEffect(() => {
+      const handleResize = () => {
+        setWidth(window.innerWidth)
+      }
+
+      handleResize() 
+
+      window.addEventListener("resize", handleResize)
+      return () => window.removeEventListener("resize", handleResize)
+    }, [])
+
 
   const router = useRouter()
   const pathname = usePathname()  
@@ -89,7 +102,7 @@ export default function HomePage() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: projectsSectionRef.current,
-            start: "top 75%",
+            start: "top 70%",
             end: "top 20%",
             scrub: true,
           },
@@ -152,7 +165,7 @@ export default function HomePage() {
     <main className="relative bg-black font-zalando min-h-screen text-white overflow-hidden">
 
       {/* HERO */}
-      <div className="relative h-screen w-full pb-[30vh] sm:pb-0 bg-black overflow-hidden flex items-center justify-center">
+      <div className={`relative ${width>=640&&width<1000?"-mt-20":"mt-10"} h-[70vh] lg:h-screen w-full pb-[30vh] sm:pb-0 bg-black overflow-hidden flex items-center justify-center`}>
         <video
           ref={videoRef}
           className="max-h-full max-w-full object-contain"
@@ -160,7 +173,7 @@ export default function HomePage() {
           muted
           playsInline
         />
-        <div className="absolute inset-0 bg-[#060818]/70 pointer-events-none" />
+        <div className="absolute bg-black/70 inset-0 pointer-events-none" />
 
        <section
           ref={heroSectionRef}
@@ -171,13 +184,13 @@ export default function HomePage() {
           "
         >
           <p
-            className="
-              absolute bottom-20 left-0
+            className={`
+              absolute bottom-20 ${width>1026?"left-0 text-left":"left-[50%] -translate-x-[50%] w-[100vw] text-center"} 
               px-6 md:px-10
-              text-left
+              mx-auto
               max-w-2xl
               text-base md:text-xl
-            "
+            `}
           >
             {typedText}
             <span className="ml-1 animate-pulse">|</span>

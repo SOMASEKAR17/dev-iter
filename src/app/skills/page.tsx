@@ -88,16 +88,16 @@ const Page = () => {
   }, [pathname]) // 👈 rerun on every navigation
 
   return (
-    <div className="min-h-screen max-w-400 py-30 mx-auto relative px-6 space-y-24">
+    <div className="min-h-screen max-w-400 pt-15 pb-20 mx-auto relative px-6 space-y-0">
 
       {/* ---------------- LANGUAGES ---------------- */}
       <section className="relative">
-        <h2 className="text-[15vw] font-exorts text-white mb-8">
+        <h2 className="text-[20vw] sm:text-[10vw] text-center font-exorts text-white lg:-mb-10">
           Languages
         </h2>
 
-        <div style={{ height: "60vh", position: "relative" }}>
-          <FlowingMenu items={languagesItems} />
+        <div  className="h-[80vw] sm:h-[60vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw]" style={{  position: "relative" }}>
+          <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={languagesItems} />
         </div>
       </section>
 
@@ -105,13 +105,13 @@ const Page = () => {
       <section className="relative">
         <h2
           ref={webHeaderRef}
-          className="text-[15vw] font-exorts text-white mb-8"
+          className="text-[20vw] sm:text-[10vw] font-exorts text-white lg:-mb-10"
         >
           Web Development
         </h2>
 
-        <div style={{ height: "60vh", position: "relative" }}>
-          <FlowingMenu items={webDevItems} />
+        <div className="h-[90vw] sm:h-[65vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw]"  style={{  position: "relative" }}>
+          <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={webDevItems} />
         </div>
       </section>
 
@@ -119,13 +119,13 @@ const Page = () => {
       <section className="relative overflow-hidden">
         <h2
           ref={aiHeaderRef}
-          className="text-[15vw] text-end font-exorts text-white mb-8"
+          className="text-[20vw] sm:text-[10vw] text-end font-exorts text-white lg:-mb-10"
         >
           AI / Machine Learning
         </h2>
 
-        <div style={{ height: "60vh", position: "relative" }}>
-          <FlowingMenu items={aiMlItems} />
+        <div className="h-[90vw] sm:h-[60vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw]"  style={{  position: "relative" }}>
+          <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={aiMlItems} />
         </div>
       </section>
 
