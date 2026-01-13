@@ -4,16 +4,18 @@ export async function GET() {
   const projects = [
     {
   "id": "p1",
-  "createdAt": "2026-01-12",
+  "createdAt": "2025-09-24",
   "title": "crowder.ai",
+  "link":"https://github.com/SOMASEKAR17/Crowder",
   "description": "An AI-powered idea validation platform that evaluates how people may respond to a product or concept. It simulates audience reactions, analyzes sentiment, and predicts engagement levels to help founders and teams make better decisions before launch.",
   "techstack": {
     "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "JavaScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
     "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
     "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     "AI/ML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-    "Three.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg"
+    "Three.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+    "Vite": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg"
   },
   "gallery": [
     "https://res.cloudinary.com/di97k34d0/image/upload/v1768238803/Screenshot_2026-01-12_201642_sej9ra.png",
@@ -25,17 +27,22 @@ export async function GET() {
   ]
 },{
   "id": "p2",
-  "createdAt": "2026-01-12",
+  "createdAt": "2025-04-17",
   "title": "FintechX – AI-Powered Finance Management Platform",
+  "link":{
+    "linkedIn":"https://www.linkedin.com/posts/somasekar-naidu-841646320_hackathon-fintech-ai-activity-7318672541546418177-6CaY?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFFAuTEB-V8H8Y59NcUqLsy-P3ftYUUhmpQ",
+    "Github":"https://github.com/SOMASEKAR17/fintech-x"
+  },
   "description": "FintechX is a smart finance management platform that helps users track expenses, manage investments, and plan savings using AI-driven insights. The system analyzes spending patterns, provides personalized financial suggestions, and presents data through clean, interactive dashboards for better decision-making.",
   "techstack": {
     "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "JavaScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
     "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
     "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     "Express.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
     "AI/ML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-    "MongoDB": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
+    "MongoDB": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+    "Vite": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg"
   },
   "gallery": [
     "https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_222702_ck1dki.png",
@@ -46,8 +53,9 @@ export async function GET() {
   ]
 },{
   "id": "p3",
-  "createdAt": "2026-01-12",
+  "createdAt": "2025-05-31",
   "title": "iPhone 15 Flagship Product Page Clone",
+  "link":"#",
   "description": "A visually rich clone of Apple’s iPhone 15 product page featuring smooth carousels, premium UI animations, and an interactive 3D product viewer. The project recreates the flagship Apple experience with fluid transitions, responsive design, and immersive product exploration.",
   "techstack": {
     "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
@@ -67,8 +75,9 @@ export async function GET() {
 }
 ,{
   "id": "p4",
-  "createdAt": "2026-01-12",
+  "createdAt": "2025-07-05",
   "title": "GoldLend Pro – ERP for Gold Loan Management",
+  "link":"https://github.com/SOMASEKAR17/goldLending-ERP",
   "description": "A full-featured ERP application built to manage gold loan operations. It helps admins handle customers, loans, payments, operators, and reports from a single dashboard, improving efficiency and reducing manual work in lending businesses.",
   "techstack": {
     "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
@@ -76,7 +85,8 @@ export async function GET() {
     "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
     "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     "Express.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
-    "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+    "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+    "Vite": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg"
   },
   "gallery": [
     "https://res.cloudinary.com/di97k34d0/image/upload/v1768238815/Screenshot_2026-01-12_215242_yhlvj2.png",
@@ -91,17 +101,19 @@ export async function GET() {
   ]
 },{
   "id": "p5",
-  "createdAt": "2026-01-12",
+  "createdAt": "2025-08-12",
   "title": "GenReal.ai – AI Security Platform (Internship Project)",
+  "link":"https://github.com/SOMASEKAR17/GenReal.ai_main",
   "description": "Worked as an intern at GenReal.ai, contributing to the development of an AI-powered deepfake detection platform. Built interactive dashboards that display deepfake probability, model confidence, and real-time processing insights, helping improve digital trust and online security.",
   "techstack": {
     "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-    "TypeScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    "JavaScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
     "Tailwind CSS": "https://cdn.simpleicons.org/tailwindcss/06B6D4",
     "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     "Three.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
     "Python": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-    "AI/ML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg"
+    "AI/ML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
+    "Vite": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg"
   },
   "gallery": [
     "https://res.cloudinary.com/di97k34d0/image/upload/v1768238810/Screenshot_2026-01-12_203637_qj96vy.png",
@@ -114,8 +126,9 @@ export async function GET() {
   ]
 },{
   "id": "p6",
-  "createdAt": "2026-01-12",
+  "createdAt": "2025-11-02",
   "title": "Ecommerce Product Explorer",
+  "link":"https://github.com/SOMASEKAR17/ecommerce",
   "description": "A simple frontend eCommerce website that allows users to browse products, filter them by category and price, and view product details. This project was built as a CodeChef requirement task to demonstrate API integration and modern frontend development skills.",
   "techstack": {
     "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",

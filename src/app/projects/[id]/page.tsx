@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { X } from "lucide-react"
+import {  Github, Linkedin } from "lucide-react"
+
 
 interface Project {
   id: string
@@ -12,12 +14,30 @@ interface Project {
   description: string
   gallery: string[]
   techstack: Record<string, string>
+  link: string | {
+    linkedIn?: string
+    Github?: string
+  }
 }
+
+
 
 export default function ProjectDetailsPage() {
   const { id } = useParams()
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
+
+  const getLinks = (link: Project["link"]) => {
+    if (typeof link === "string") {
+      return { github: link, linkedin: null }
+    }
+
+    return {
+      github: link?.Github || null,
+      linkedin: link?.linkedIn || null,
+    }
+  }
+
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -51,14 +71,52 @@ export default function ProjectDetailsPage() {
       >
         {/* Close */}
         <button
-          onClick={() => router.back()}
+          onClick={() => {
+            router.push("/projects")
+            window.scrollTo({ top: 0, behavior: "smooth" })
+          }}
+
           className="absolute right-4 top-4 rounded-full bg-white/10 p-2 hover:bg-white/20"
         >
           <X size={18} />
         </button>
 
-        {/* Title */}
-        <h1 className="text-3xl font-bold">{project.title}</h1>
+        {/* Title + Links */}
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="text-3xl font-bold">{project.title}</h1>
+
+          {(() => {
+            const { github, linkedin } = getLinks(project.link)
+
+            return (
+              <div className="flex mt-10 items-center gap-3">
+                {github && (
+                  <a
+                    href={github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+                  >
+                    <Github size={16} />
+                  </a>
+                )}
+
+                {linkedin && (
+                  <a
+                    href={linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+                  >
+                    <Linkedin size={16} />
+                  </a>
+                )}
+              </div>
+            )
+          })()}
+        </div>
+
+
         <p className="mt-2 text-sm text-gray-400">
           {new Date(project.createdAt).toDateString()}
         </p>

@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation"
 import Masonry from "@/components/reactBites/masonry"
 import { usePathname } from "next/navigation"
 import SliderRow from "@/components/custom/SliderWindow"
+import { Github, Linkedin } from "lucide-react"
+
 
 interface Project {
   id: string
@@ -13,11 +15,15 @@ interface Project {
   title: string
   description: string
   gallery: string[]
-
   techstack: {
-    [techName: string]: string   
+    [techName: string]: string
+  }
+  link: string | {
+    linkedIn?: string
+    Github?: string
   }
 }
+
 
 
 export default function ProjectsPage() {
@@ -25,6 +31,18 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
+
+  const getLinks = (link: Project["link"]) => {
+  if (typeof link === "string") {
+    return { github: link !== "#" ? link : null, linkedin: null }
+  }
+
+  return {
+    github: link?.Github || null,
+    linkedin: link?.linkedIn || null,
+  }
+}
+
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -129,12 +147,49 @@ export default function ProjectsPage() {
               transition
             "
           >
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">{project.title}</h2>
-              <span className="text-xs text-gray-400">
-                {new Date(project.createdAt).toDateString()}
-              </span>
-            </div>
+           <div className="flex items-start justify-between gap-3">
+  <div>
+    <h2 className="text-xl font-semibold">{project.title}</h2>
+    <span className="text-xs text-gray-400">
+      {new Date(project.createdAt).toDateString()}
+    </span>
+  </div>
+
+  {/* 🔗 Links */}
+  {(() => {
+    const { github, linkedin } = getLinks(project.link)
+
+    return (
+      <div
+        className="flex items-center gap-2"
+        onClick={(e) => e.stopPropagation()} // prevent card click
+      >
+        {github && (
+          <a
+            href={github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+          >
+            <Github size={14} />
+          </a>
+        )}
+
+        {linkedin && (
+          <a
+            href={linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+          >
+            <Linkedin size={14} />
+          </a>
+        )}
+      </div>
+    )
+  })()}
+</div>
+
 
             <p className="mt-4 text-gray-300 leading-relaxed">
               {project.description}
