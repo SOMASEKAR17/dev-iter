@@ -62,8 +62,8 @@ export default function ProjectDetailsPage() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="
-          relative h-[70vh] scroll-bar overflow-y-scroll
-          w-full max-w-3xl rounded-2xl
+          relative h-[80vh] scroll-bar overflow-y-scroll
+          w-full max-w-5xl rounded-2xl
           bg-black/30 backdrop-blur-3xl
           border border-white/10 shadow-2xl
           p-8 text-white
