@@ -4,6 +4,7 @@ import { signInWithGoogle } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 
+
 const LoginPage = () => {
   const router = useRouter();
 
