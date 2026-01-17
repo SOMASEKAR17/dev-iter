@@ -1,43 +1,64 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { app } from "@/firebase";
 
+const auth = getAuth(app);
 
+export default function AdminPage() {
+  const router = useRouter();
 
-export default  function AdminPage() {
+  const [user, setUser] = useState<User | null>(null);
+  const [projectsCount, setProjectsCount] = useState<number>(0);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
-  const [projectsCount,SetProjectsCout] = useState<number>(0);
-  
-  useEffect(()=>{
-
-    async function getProjectsCount() {
-      const res = await fetch(`/api/projects`, {
-        cache: "no-store",
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch projects");
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!currentUser) {
+        setCheckingAuth(false);
+        router.replace("/admin/login");
+        return;
       }
 
-      const data = await res.json();
-      SetProjectsCout(data.length)
-    }
+      setUser(currentUser);
 
-    getProjectsCount();
-    
-    
-  },[])
+      try {
+        const res = await fetch("/api/projects", { cache: "no-store" });
+        if (!res.ok) throw new Error("Failed to fetch projects");
+
+        const data = await res.json();
+        setProjectsCount(data.length);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setCheckingAuth(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-medium">Projects</h3>
-          <p className="text-gray-500">{projectsCount} Total</p>
+    <div className="min-h-screen">
+      {checkingAuth && (
+        <div className="flex items-center justify-center h-screen">
+          <p className="text-gray-500">Checking authentication...</p>
         </div>
-      </div>
+      )}
+      {!checkingAuth && user && (
+        <div>
+          <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="text-lg font-medium">Projects</h3>
+              <p className="text-gray-500">{projectsCount} Total</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
