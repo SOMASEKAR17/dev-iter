@@ -1,3 +1,5 @@
+"use client"
+
 import Navbar from "@/components/AdminComponents/navbar";
 
 export default function AdminLayout({
@@ -8,7 +10,6 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Navbar />
-      {/* Main Content */}
       <main className="flex-1 p-8">
         {children}
       </main>
