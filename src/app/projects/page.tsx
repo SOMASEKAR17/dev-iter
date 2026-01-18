@@ -7,22 +7,7 @@ import Masonry from "@/components/reactBites/masonry"
 import { usePathname } from "next/navigation"
 import SliderRow from "@/components/custom/SliderWindow"
 import { Github, Linkedin } from "lucide-react"
-
-
-interface Project {
-  id: string
-  createdAt: string
-  title: string
-  description: string
-  gallery: string[]
-  techstack: {
-    [techName: string]: string
-  }
-  link: string | {
-    linkedIn?: string
-    Github?: string
-  }
-}
+import {type Project} from "@/types"
 
 
 
@@ -148,54 +133,50 @@ export default function ProjectsPage() {
             "
           >
            <div className="flex items-start justify-between gap-3">
-  <div>
-    <h2 className="text-xl font-semibold">{project.title}</h2>
-    <span className="text-xs text-gray-400">
-      {new Date(project.createdAt).toDateString()}
-    </span>
-  </div>
+              <div>
+                <h2 className="text-xl font-semibold">{project.title}</h2>
+                <span className="text-xs text-gray-400">
+                  {new Date(project.createdAt).toDateString()}
+                </span>
+              </div>
+              {(() => {
+                const { github, linkedin } = getLinks(project.link)
 
-  {/* 🔗 Links */}
-  {(() => {
-    const { github, linkedin } = getLinks(project.link)
+                return (
+                  <div
+                    className="flex items-center gap-2"
+                    onClick={(e) => e.stopPropagation()} // prevent card click
+                  >
+                    {github && (
+                      <a
+                        href={github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+                      >
+                        <Github size={14} />
+                      </a>
+                    )}
 
-    return (
-      <div
-        className="flex items-center gap-2"
-        onClick={(e) => e.stopPropagation()} // prevent card click
-      >
-        {github && (
-          <a
-            href={github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
-          >
-            <Github size={14} />
-          </a>
-        )}
-
-        {linkedin && (
-          <a
-            href={linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
-          >
-            <Linkedin size={14} />
-          </a>
-        )}
-      </div>
-    )
-  })()}
-</div>
+                    {linkedin && (
+                      <a
+                        href={linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+                      >
+                        <Linkedin size={14} />
+                      </a>
+                    )}
+                  </div>
+                )
+              })()}
+            </div>
 
 
             <p className="mt-4 text-gray-300 leading-relaxed">
               {project.description}
             </p>
-
-            {/* 🔽 TECH STACK BADGES */}
             <div className="mt-6 flex flex-wrap gap-3">
               {Object.entries(project.techstack).map(([name, logo]) => (
                 <div
@@ -222,7 +203,7 @@ export default function ProjectsPage() {
             </div>
           </motion.div>
         ))}
-      </div>
+        </div>
 
       </section>
 

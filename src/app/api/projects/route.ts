@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server"
+import { type Projects } from "@/types"
 
 
 
 export async function GET() {
-  const projects = [
+  const projects:Projects = [
     {
   "id": "p1",
   "createdAt": "2025-09-24",

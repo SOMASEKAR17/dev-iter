@@ -48,13 +48,13 @@ export default function AdminPage() {
         </div>
       )}
       {!checkingAuth && user && (
-        <div>
+        <div className="text-black">
           <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-medium">Projects</h3>
-              <p className="text-gray-500">{projectsCount} Total</p>
+              <p >{projectsCount} Total</p>
             </div>
           </div>
         </div>
