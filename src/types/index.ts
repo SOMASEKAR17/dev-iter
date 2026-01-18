@@ -1,0 +1,1 @@
+export {type Projects,type Project} from "@/types/ProjectTypes"
