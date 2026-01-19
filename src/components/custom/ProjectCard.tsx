@@ -67,7 +67,6 @@ export default function ProjectDetailsPage({id,setOpenCard}:{id:string,setOpenCa
             onClick={() => {
                 router.push("/projects")
                 setOpenCard(false)
-                window.scrollTo({ top: 0, behavior: "smooth" })
             }}
 
             className="absolute right-4 top-4 rounded-full bg-white/10 p-2 hover:bg-white/20"
@@ -145,9 +144,9 @@ export default function ProjectDetailsPage({id,setOpenCard}:{id:string,setOpenCa
             </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-2 gap-4">
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {project.gallery.map((img, i) => (
-                <div key={i} className="overflow-hidden rounded-xl bg-white/10">
+                <div key={i} className="overflow-hidden border rounded-xl bg-white/10">
                 <img src={img} alt="project" className="h-full w-full object-cover" />
                 </div>
             ))}
