@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Masonry from "@/components/reactBites/masonry"
@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation"
 import SliderRow from "@/components/custom/SliderWindow"
 import { Github, Linkedin } from "lucide-react"
 import {type Project} from "@/types"
+import ProjectDetailsPage from "@/components/custom/ProjectCard"
 
 
 
@@ -16,6 +17,12 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
+
+  const [openCard,setOpenCard] = useState<boolean>(false)
+  const [cardId,setCardId] = useState<string>("")
+
+
+
 
   const getLinks = (link: Project["link"]) => {
   if (typeof link === "string") {
@@ -83,6 +90,8 @@ export default function ProjectsPage() {
   return (
     <main className="relative min-h-screen text-white overflow-hidden">
 
+      {openCard &&<ProjectDetailsPage id={cardId} setOpenCard={setOpenCard}/>}
+
       {/* ---------------- MASONRY BACKGROUND ---------------- */}
       <div className="absolute inset-0 -z-10 flex justify-center">
         <div className="w-full max-w-400 opacity-25">
@@ -122,7 +131,10 @@ export default function ProjectsPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            onClick={() => router.push(`/projects/${project.id}`)}
+            onClick={() => {
+              setOpenCard(true)
+              setCardId(project.id)
+            }}
             className="
               cursor-pointer
               rounded-2xl
