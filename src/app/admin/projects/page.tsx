@@ -4,30 +4,32 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { app } from "@/firebase";
-import { type Projects } from '@/types';
 import { motion } from "framer-motion";
-import { Github, Linkedin } from "lucide-react"
-import {type Project} from "@/types"
+import { Github, Linkedin } from "lucide-react";
+import { type Projects, type Project } from "@/types";
+import ProjectDetailsEditPage from "@/components/custom/ProjectEditCard";
 
 const auth = getAuth(app);
 
 export default function AdminPage() {
   const router = useRouter();
 
-  const getLinks = (link: Project["link"]) => {
-    if (typeof link === "string") {
-      return { github: link !== "#" ? link : null, linkedin: null }
-    }
-  
-    return {
-      github: link?.Github || null,
-      linkedin: link?.linkedIn || null,
-    }
-  }
-
   const [user, setUser] = useState<User | null>(null);
   const [projects, setProjects] = useState<Projects>([]);
   const [checkingAuth, setCheckingAuth] = useState(true);
+
+  const [openCard, setOpenCard] = useState(false);
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+
+  const getLinks = (link: Project["link"]) => {
+    if (typeof link === "string") {
+      return { github: link !== "#" ? link : null, linkedin: null };
+    }
+    return {
+      github: link?.Github || null,
+      linkedin: link?.linkedIn || null,
+    };
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -41,12 +43,8 @@ export default function AdminPage() {
 
       try {
         const res = await fetch("/api/projects", { cache: "no-store" });
-        if (!res.ok) throw new Error("Failed to fetch projects");
-
         const data = await res.json();
         setProjects(data);
-      } catch (err) {
-        console.error(err);
       } finally {
         setCheckingAuth(false);
       }
@@ -56,108 +54,104 @@ export default function AdminPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-8 pt-20 relative bg-black text-white">
+      {openCard && activeProjectId && (
+        <ProjectDetailsEditPage
+          id={activeProjectId}
+          setOpenCard={setOpenCard}
+        />
+      )}
+
       {checkingAuth && (
         <div className="flex items-center justify-center h-screen">
-          <p className="text-gray-500">Checking authentication...</p>
+          <p className="text-gray-400">Checking authentication...</p>
         </div>
       )}
+
       {!checkingAuth && user && (
-        <div className="text-black">
-          <h2 className="text-2xl font-semibold mb-6">Projects</h2>
+        <div>
+          <h2 className="text-2xl font-semibold mb-6 text-white">
+            Projects
+          </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {projects.map((project)=>(
-                    <motion.div
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4 }}
-                    onClick={() => router.push(`/admin/projects/${project.id}`)}
-                    className="
-                    cursor-pointer
-                    rounded-2xl
-                    bg-white backdrop-blur-md
-                    p-6
-                    hover:bg-zinc-200
-                    transition
-                    "
-                >
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {projects.map((project) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+                onClick={() => {
+                  setActiveProjectId(project.id)
+                  setOpenCard(true)
+                }}
+                className="
+                  cursor-pointer
+                  rounded-2xl
+                  bg-white/5
+                  backdrop-blur-xl
+                  border border-white/10
+                  p-6
+                  hover:bg-white/10
+                  hover:border-white/20
+                  transition
+                "
+              >
                 <div className="flex items-start justify-between gap-3">
-                    <div>
-                        <h2 className="text-xl font-semibold">{project.title}</h2>
-                        <span className="text-xs text-zinc-600">
-                        {new Date(project.createdAt).toDateString()}
-                        </span>
-                    </div>
+                  <div>
+                    <h2 className="text-xl font-semibold text-white">
+                      {project.title}
+                    </h2>
+                    <span className="text-xs text-gray-400">
+                      {new Date(project.createdAt).toDateString()}
+                    </span>
+                  </div>
+
+                  <div
+                    className="flex items-center gap-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     {(() => {
-                        const { github, linkedin } = getLinks(project.link)
-
-                        return (
-                        <div
-                            className="flex items-center gap-2"
-                            onClick={(e) => e.stopPropagation()} // prevent card click
-                        >
-                            {github && (
+                      const { github, linkedin } = getLinks(project.link)
+                      return (
+                        <>
+                          {github && (
                             <a
-                                href={github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+                              href={github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
                             >
-                                <Github size={14} />
+                              <Github size={14} />
                             </a>
-                            )}
+                          )}
 
-                            {linkedin && (
+                          {linkedin && (
                             <a
-                                href={linkedin}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
+                              href={linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition"
                             >
-                                <Linkedin size={14} />
+                              <Linkedin size={14} />
                             </a>
-                            )}
-                        </div>
-                        )
+                          )}
+                        </>
+                      )
                     })()}
-                    </div>
-
-
-                    <p className="mt-4 text-zinc-800 leading-relaxed">
-                    {project.description}
-                    </p>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                    {Object.entries(project.techstack).map(([name, logo]) => (
-                        <div
-                        key={name}
-                        className="
-                            flex items-center gap-2
-                            rounded-full
-                            bg-zinc-200
-                            px-3 py-1
-                            text-xs text-zinc-800
-                            backdrop-blur
-                            hover:bg-white/20
-                            transition
-                        "
-                        >
-                        <img
-                            src={logo}
-                            alt={name}
-                            className="h-4 w-4 object-contain"
-                        />
-                        <span>{name}</span>
-                        </div>
-                    ))}
-                    </div>
-                </motion.div>
-                        ))}
-                    </div>
+                  </div>
                 </div>
-            )}
+
+                <p className="mt-4 text-gray-300 leading-relaxed">
+                  {project.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
+
   );
 }

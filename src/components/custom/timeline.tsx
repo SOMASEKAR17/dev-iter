@@ -284,7 +284,6 @@ export default function JourneyTimeline() {
             <FontAwesomeIcon icon={faPersonBiking} />
           </div>
 
-          {/* TYPE DOTS */}
           {timelineData.map((item, i) => (
             <div
               key={i}
