@@ -1,7 +1,7 @@
 "use client"
 
 import FlowingMenu from "@/components/reactBites/flowingMenue"
-import { useLayoutEffect, useRef } from "react"
+import  { motion } from "framer-motion"
 import { usePathname } from "next/navigation"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -9,10 +9,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 
 const Page = () => {
-  const webHeaderRef = useRef<HTMLHeadingElement>(null)
-  const aiHeaderRef = useRef<HTMLHeadingElement>(null)
 
-  const pathname = usePathname() // 👈 important for navigation fix
+  const pathname = usePathname();
 
   /* ---------------- LANGUAGES ---------------- */
   const languagesItems = [
@@ -49,85 +47,70 @@ const Page = () => {
     { link: "#", text: "LangChain", image: "https://avatars.githubusercontent.com/u/126733545?s=200&v=4" },
   ]
 
-  /* ---------------- GSAP FIXED ---------------- */
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      if (webHeaderRef.current) {
-        gsap.from(webHeaderRef.current, {
-          x: -300,
-          opacity: 0,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: webHeaderRef.current,
-            start: "top 80%",
-            end: "top 40%",
-            scrub: true,
-          },
-        })
-      }
-
-      if (aiHeaderRef.current) {
-        gsap.from(aiHeaderRef.current, {
-          x: 300,
-          opacity: 0,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: aiHeaderRef.current,
-            start: "top 80%",
-            end: "top 40%",
-            scrub: true,
-          },
-        })
-      }
-    })
-
-    // 🔥 makes GSAP work after route navigation
-    ScrollTrigger.refresh()
-
-    return () => ctx.revert()
-  }, [pathname]) // 👈 rerun on every navigation
+ 
 
   return (
-    <div className="min-h-screen max-w-400 pt-15 pb-20 mx-auto relative px-6 space-y-0">
+    <div className="min-h-screen  pt-30 pb-20   px-6 space-y-0">
 
-      {/* ---------------- LANGUAGES ---------------- */}
-      <section className="relative">
-        <h2 className="text-[20vw] sm:text-[10vw] text-center font-exorts text-white lg:-mb-10">
-          Languages
-        </h2>
-
-        <div  className="h-[80vw] sm:h-[60vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw]" style={{  position: "relative" }}>
-          <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={languagesItems} />
-        </div>
-      </section>
-
-      {/* ---------------- WEB DEV ---------------- */}
-      <section className="relative">
-        <h2
-          ref={webHeaderRef}
-          className="text-[20vw] sm:text-[10vw] font-exorts text-white lg:-mb-10"
-        >
-          Web Development
-        </h2>
-
-        <div className="h-[90vw] sm:h-[65vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw]"  style={{  position: "relative" }}>
-          <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={webDevItems} />
-        </div>
-      </section>
-
-      {/* ---------------- AI / ML ---------------- */}
-      <section className="relative overflow-hidden">
-        <h2
-          ref={aiHeaderRef}
-          className="text-[20vw] sm:text-[10vw] text-end font-exorts text-white lg:-mb-10"
-        >
-          AI / Machine Learning
-        </h2>
-
-        <div className="h-[90vw] sm:h-[60vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw]"  style={{  position: "relative" }}>
-          <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={aiMlItems} />
-        </div>
-      </section>
+      <div className="grid-cols-1 grid md:grid-cols-2 mx-auto relative gap-10 max-w-350">
+        {/* ---------------- LANGUAGES ---------------- */}
+        <section className="relative border rounded-4xl">
+          <motion.h1
+            key={pathname}
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{
+              duration: 0.9,
+              ease: [0.22, 1, 0.36, 1],
+              delay:0.25
+            }}
+        
+          className="text-[20vw] sm:text-[10vw] text-center font-exorts text-white lg:-mb-10">
+            Languages
+          </motion.h1>
+          <div  className="h-[80vw] rounded-4xl sm:h-[60vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw]" style={{  position: "relative" }}>
+            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={languagesItems} />
+          </div>
+        </section>
+        {/* ---------------- WEB DEV ---------------- */}
+        <section className="relative border rounded-4xl">
+          <motion.h1
+            key={pathname}
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{
+              duration: 0.9,
+              ease: [0.22, 1, 0.36, 1],
+              delay:0.25
+            }}
+            className="text-[20vw] sm:text-[10vw] text-center font-exorts text-white lg:-mb-10"
+          >
+            Web Development
+          </motion.h1>
+          <div className="h-[90vw] sm:h-[65vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw]"  style={{  position: "relative" }}>
+            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={webDevItems} />
+          </div>
+        </section>
+        {/* ---------------- AI / ML ---------------- */}
+        <section className="relative overflow-hidden border rounded-4xl">
+          <motion.h1
+            key={pathname}
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{
+              duration: 0.9,
+              ease: [0.22, 1, 0.36, 1],
+              delay:0.25
+            }}
+            className="text-[20vw] sm:text-[10vw] text-center font-exorts text-white lg:-mb-10"
+          >
+            AI / Machine Learning
+          </motion.h1>
+          <div className="h-[90vw] sm:h-[60vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw]"  style={{  position: "relative" }}>
+            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={aiMlItems} />
+          </div>
+        </section>
+      </div>
 
     </div>
   )
