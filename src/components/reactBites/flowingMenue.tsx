@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
+import { useRouter } from "next/navigation";
+
 
 interface MenuItemData {
   link: string;
@@ -36,7 +38,7 @@ const FlowingMenu: React.FC<FlowingMenuProps> = ({
   borderColor = '#fff'
 }) => {
   return (
-    <div className="w-full h-full overflow-hidden" style={{ backgroundColor: bgColor }}>
+    <div className="w-full rounded-b-4xl h-full overflow-hidden" style={{ backgroundColor: bgColor }}>
       <nav className="flex flex-col h-full m-0 p-0">
         {items.map((item, idx) => (
           <MenuItem
@@ -71,6 +73,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
   const marqueeInnerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<gsap.core.Tween | null>(null);
   const [repetitions, setRepetitions] = useState(4);
+  const router = useRouter();
+
 
   const animationDefaults = { duration: 0.6, ease: 'expo' };
 
@@ -157,6 +161,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
       <a
         className="flex items-center justify-center h-full relative cursor-pointer font-zalando uppercase no-underline font-semibold text-[4vw] md:text-[3vw] lg:text-[2vw] xl:text-[1.5vw]"
         href={link}
+        onClick={(e) => {
+          e.preventDefault();
+          router.push(link);
+        }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}
