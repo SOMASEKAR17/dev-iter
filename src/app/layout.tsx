@@ -5,7 +5,7 @@ import Navbar from "@/components/navbar"
 import Footer from "@/components/footer";
 import { Icon } from "lucide-react";
 import { Analytics } from "@vercel/analytics/next"
-import SmoothScroll from "@/components/custom/SmoothScroll"
+import {ReactLenis} from "@/lib/lenis"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,18 +33,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <ReactLenis root>
       <body
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Analytics />
-        {/* <SmoothScroll> */}
           <Navbar />
           {children}
           <Footer />
-        {/* </SmoothScroll> */}
 
       </body>
+      </ReactLenis>
     </html>
   );
 }
