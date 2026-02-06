@@ -37,12 +37,13 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        <Analytics/>
-        <SmoothScroll>
+        <Analytics />
+        {/* <SmoothScroll> */}
+          <Navbar />
           {children}
-        </SmoothScroll>
-        <Footer />
+          <Footer />
+        {/* </SmoothScroll> */}
+
       </body>
     </html>
   );
