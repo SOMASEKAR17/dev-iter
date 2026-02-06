@@ -6,6 +6,11 @@
   --font-exorts:"Exorts", "sans-serif";
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 
 :root {
   --background: #ffffff;
