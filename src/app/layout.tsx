@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar"
 import Footer from "@/components/footer";
 import { Icon } from "lucide-react";
 import { Analytics } from "@vercel/analytics/next"
+import SmoothScroll from "@/components/custom/SmoothScroll"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,9 @@ export default function RootLayout({
       >
         <Navbar />
         <Analytics/>
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
         <Footer />
       </body>
     </html>
