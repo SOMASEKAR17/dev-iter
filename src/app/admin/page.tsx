@@ -41,18 +41,18 @@ export default function AdminPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-8 pt-20 relative bg-black text-white">
       {checkingAuth && (
         <div className="flex items-center justify-center h-screen">
           <p className="text-gray-500">Checking authentication...</p>
         </div>
       )}
       {!checkingAuth && user && (
-        <div className="text-black">
+        <div>
           <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow">
+            <div className="bg-zinc-800 p-6 rounded-lg shadow">
               <h3 className="text-lg font-medium">Projects</h3>
               <p >{projectsCount} Total</p>
             </div>

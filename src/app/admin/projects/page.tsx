@@ -89,11 +89,11 @@ export default function AdminPage() {
                 className="
                   cursor-pointer
                   rounded-2xl
-                  bg-white/5
+                  bg-zinc-800
                   backdrop-blur-xl
                   border border-white/10
                   p-6
-                  hover:bg-white/10
+                  hover:bg-zinc-700
                   hover:border-white/20
                   transition
                 "
