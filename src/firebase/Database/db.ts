@@ -1,11 +1,4 @@
-"use client"
+import { getDatabase } from "firebase/database";
+import { app } from "../Config/firebase.config";
 
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import {app} from "@/firebase";
-
-const db = getFirestore(app);
-
-await addDoc(collection(db, "users"), {
-  name: "Somasekar",
-  role: "developer"
-});
+export const db = getDatabase(app);
