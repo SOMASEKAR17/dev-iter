@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react"
 const navigation = [
   { route: "/admin", name: "Dashboard", alt: "admin" },
   { route: "/admin/projects", name: "Projects", alt: "projects" },
+  { route: "/admin/skills", name: "Skills", alt: "skills" },
   { route: "/admin/messages", name: "Messages", alt: "messages" },
   { route: "/", name: "Exit Admin Panel", alt: "exit" },
 ]
