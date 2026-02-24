@@ -162,7 +162,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main className="relative bg-black font-zalando min-h-screen text-white overflow-hidden">
+    <main className="relative bg-black font-zalando min-h-screen text-white overflow-x-hidden">
 
       {/* HERO */}
       <div className={`relative ${width>=640&&width<1000?"-mt-20":"mt-10"} h-[70vh] lg:h-screen w-full pb-[30vh] sm:pb-0 bg-black overflow-hidden flex items-center justify-center`}>
@@ -318,10 +318,11 @@ export default function HomePage() {
         </div>
       </section>
       <AboutSection/>
+      <div className="py-20" />
       <JourneyTimeline/>
 
       {/* HORIZONTAL SCROLL */}
-      <section>
+      <section className="relative z-20 mt-20">
         <HorizontalScroll />
       </section>
 

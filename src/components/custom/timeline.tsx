@@ -149,6 +149,11 @@ export default function JourneyTimeline() {
       });
     }, sectionRef);
 
+    // 🔥 Force refresh for layout stability
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+
     return () => ctx.revert();
   }, [loading, timelineData]);
 
@@ -157,7 +162,7 @@ export default function JourneyTimeline() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-black mx-auto max-w-7xl px-6 pb-20 md:pb-5"
+      className="relative z-10 bg-black mx-auto max-w-7xl px-6 pb-40 md:pb-60 pt-20 overflow-hidden"
     >
       <h2 className="font-exorts text-center text-[20vw] lg:text-[10vw] mb-24">
         Journey
