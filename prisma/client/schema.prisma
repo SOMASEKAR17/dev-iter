@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./client"
+  provider        = "prisma-client-js"
+  output          = "./client"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Project {
@@ -15,6 +17,7 @@ model Project {
   gallery     String[]
   techstack   Json
   link        Json
+  order       Int      @default(0)
 }
 
 model SkillCategory {

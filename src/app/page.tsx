@@ -60,23 +60,26 @@ export default function HomePage() {
 
   const [typedText, setTypedText] = useState("")
 
-  const ProjectData:{
-    id:string;
-    title: string;
-    url: string;
-}[] = [{
-    "id":"1",
-    "title":"CROWDER.AI",
-    "url":"https://res.cloudinary.com/di97k34d0/image/upload/v1768238803/Screenshot_2026-01-12_201642_sej9ra.png"
-  },{
-    "id":"2",
-    "title":"FINTECH-X",
-    "url":"https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_222702_ck1dki.png"
-  },{
-    "id":"3",
-    "title":"GENREAL.AI",
-    "url":"https://res.cloudinary.com/di97k34d0/image/upload/v1768238810/Screenshot_2026-01-12_203637_qj96vy.png"
-  }]
+  const [projectData, setProjectData] = useState<{ id: string; title: string; url: string }[]>([])
+  
+  useEffect(() => {
+    const fetchFeaturedProjects = async () => {
+      try {
+        const res = await fetch("/api/config")
+        const data = await res.json()
+        // Use featured projects from config instead of top 3
+        if (data.featuredProjects) {
+          console.log("Featured projects fetched:", data.featuredProjects)
+          setProjectData(data.featuredProjects)
+        } else {
+          console.warn("No featuredProjects found in config")
+        }
+      } catch (err) {
+        console.error("Failed to fetch featured projects:", err)
+      }
+    }
+    fetchFeaturedProjects()
+  }, [])
 
   /* ---------------- GSAP ANIMATIONS ---------------- */
   useLayoutEffect(() => {
@@ -265,8 +268,8 @@ export default function HomePage() {
 
           <div className="absolute bottom-10 left-[50%] md:static">
             <CardSwap cardDistance={60} verticalDistance={70} delay={5000}>
-              {ProjectData.map((i) => (
-                <Card key={i.id}>
+              {projectData.map((i) => (
+                <Card>
                   <div className="content text-center bg-zinc-900 rounded-t-xl py-2">
                     {i.title}
                   </div>

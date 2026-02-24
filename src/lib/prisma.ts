@@ -13,18 +13,28 @@ const prismaClientSingleton = () => {
 };
 
 declare global {
-    var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
+    var prisma_v3: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
-// Clear if stale (manual check for new model)
-const prismaInstance = globalThis.prisma;
-// @ts-ignore
-if (prismaInstance && !prismaInstance.timelineItem) {
-    globalThis.prisma = undefined;
+// Check for schema staleness
+const staleCheck = () => {
+    const existing = globalThis.prisma_v3;
+    if (!existing) return true;
+
+    // Check if new model or new field exists in the current instance
+    // @ts-ignore
+    const isStale = !existing.timelineItem || !existing.project;
+    if (isStale) return true;
+
+    return false;
 }
 
-const prisma = globalThis.prisma ?? prismaClientSingleton();
+if (staleCheck()) {
+    globalThis.prisma_v3 = undefined;
+}
+
+const prisma = globalThis.prisma_v3 ?? prismaClientSingleton();
 
 export default prisma;
 
-if (process.env.NODE_ENV !== "production") globalThis.prisma = prisma;
+if (process.env.NODE_ENV !== "production") globalThis.prisma_v3 = prisma;
