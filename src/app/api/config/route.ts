@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
-import { db } from "@/firebase/Database/db"
-import { ref, get, set } from "firebase/database"
+import prisma from "@/lib/prisma"
 
 const DEFAULT_CONFIG = {
     featuredProjects: [
@@ -12,12 +11,13 @@ const DEFAULT_CONFIG = {
 
 export async function GET() {
     try {
-        const snapshot = await get(ref(db, "config/landing"))
-        const val = snapshot.val()
-        if (!val) {
+        const config = await prisma.config.findUnique({
+            where: { id: "landing" }
+        })
+        if (!config) {
             return NextResponse.json(DEFAULT_CONFIG)
         }
-        return NextResponse.json(val)
+        return NextResponse.json(config.content)
     } catch (error) {
         console.error("Error fetching config:", error)
         return NextResponse.json(DEFAULT_CONFIG)
@@ -27,7 +27,11 @@ export async function GET() {
 export async function PATCH(request: Request) {
     try {
         const body = await request.json()
-        await set(ref(db, "config/landing"), body)
+        await prisma.config.upsert({
+            where: { id: "landing" },
+            update: { content: body },
+            create: { id: "landing", content: body }
+        })
         return NextResponse.json({ success: true })
     } catch (error) {
         console.error("Error updating config:", error)

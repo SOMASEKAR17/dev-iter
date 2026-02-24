@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  createdAt   String
+  title       String
+  description String
+  gallery     String[]
+  techstack   Json
+  link        Json
+}
+
+model SkillCategory {
+  id    String @id
+  items Json
+}
+
+model Config {
+  id      String @id @default("landing")
+  content Json
+}
