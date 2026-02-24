@@ -100,12 +100,23 @@ export default function AdminSkillsPage() {
     toast.success(`Category "${newCategoryName}" added!`)
   }
 
-  const removeCategory = (category: string) => {
-    if (!confirm(`Are you sure you want to delete the "${category}" category?`)) return
-    const updated = { ...skills }
-    delete updated[category]
-    setSkills(updated)
-    toast.success("Category removed locally. Save to apply.")
+  const removeCategory = async (category: string) => {
+    if (!confirm(`Are you sure you want to delete the "${category}" category? This will delete it from the database too.`)) return
+    
+    try {
+      const res = await fetch(`/api/skills?category=${category}`, { method: "DELETE" })
+      if (res.ok) {
+        const updated = { ...skills }
+        delete updated[category]
+        setSkills(updated)
+        toast.success("Category deleted from database")
+      } else {
+        toast.error("Failed to delete from database")
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("An error occurred")
+    }
   }
 
   const saveCategory = async (category: string) => {
@@ -160,7 +171,7 @@ export default function AdminSkillsPage() {
             <section key={category} className="bg-zinc-900/50 rounded-2xl border border-white/10 p-6 backdrop-blur-sm relative group/section">
               <button 
                 onClick={() => removeCategory(category)}
-                className="absolute top-6 right-40 p-2 text-white/20 hover:text-red-500 opacity-0 group-hover/section:opacity-100 transition"
+                className="absolute top-6 right-50 p-2 text-white hover:text-red-500 opacity-0 group-hover/section:opacity-100 transition"
                 title="Delete Category"
               >
                 <Trash size={16} />
