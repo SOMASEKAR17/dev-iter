@@ -9,6 +9,7 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import AboutSection from "@/components/custom/about"
 import JourneyTimeline from "@/components/custom/timeline"
+import LoadingScreen from "@/components/custom/LoadingScreen"
 import { Github, Linkedin, Mail, Phone } from "lucide-react"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -22,6 +23,8 @@ export default function HomePage() {
   const skillsTextRef = useRef<HTMLDivElement>(null)
   const socialsRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState<number>(0)
+  const [isDataLoaded, setIsDataLoaded] = useState(false)
+  const [timelineData, setTimelineData] = useState<any[]>([])
 
     useEffect(() => {
       const handleResize = () => {
@@ -63,22 +66,72 @@ export default function HomePage() {
   const [projectData, setProjectData] = useState<{ id: string; title: string; url: string }[]>([])
   
   useEffect(() => {
-    const fetchFeaturedProjects = async () => {
+    const fetchAllData = async () => {
+      // 1. Try to load from localStorage first for "instant" load
+      const cachedProjects = localStorage.getItem("dev-iter-projects")
+      const cachedTimeline = localStorage.getItem("dev-iter-timeline")
+      
+      let hasCache = false
+
+      if (cachedProjects) {
+        try {
+          const parsed = JSON.parse(cachedProjects)
+          setProjectData(parsed)
+          hasCache = true
+        } catch (e) { console.error("Projects cache error", e) }
+      }
+
+      if (cachedTimeline) {
+        try {
+          const parsed = JSON.parse(cachedTimeline)
+          setTimelineData(parsed)
+          hasCache = true
+        } catch (e) { console.error("Timeline cache error", e) }
+      }
+
+      if (hasCache) {
+        // Still show loader for at least 1s for the cool animation
+        setTimeout(() => setIsDataLoaded(true), 1200)
+      }
+
       try {
-        const res = await fetch("/api/config")
-        const data = await res.json()
-        // Use featured projects from config instead of top 3
-        if (data.featuredProjects) {
-          console.log("Featured projects fetched:", data.featuredProjects)
-          setProjectData(data.featuredProjects)
-        } else {
-          console.warn("No featuredProjects found in config")
+        // 2. Fetch fresh data in the background
+        const [configRes, timelineRes] = await Promise.all([
+          fetch("/api/config"),
+          fetch("/api/timeline")
+        ])
+        
+        const [configData, timelineItems] = await Promise.all([
+          configRes.json(),
+          timelineRes.json()
+        ])
+
+        const freshProjects = configData.featuredProjects || []
+        
+        // 3. Compare with cache and update if changed
+        const projectsChanged = JSON.stringify(freshProjects) !== cachedProjects
+        const timelineChanged = JSON.stringify(timelineItems) !== cachedTimeline
+
+        if (projectsChanged) {
+          setProjectData(freshProjects)
+          localStorage.setItem("dev-iter-projects", JSON.stringify(freshProjects))
         }
+
+        if (timelineChanged) {
+          setTimelineData(timelineItems)
+          localStorage.setItem("dev-iter-timeline", JSON.stringify(timelineItems))
+        }
+        
+        // Final mark as loaded
+        setIsDataLoaded(true)
       } catch (err) {
-        console.error("Failed to fetch featured projects:", err)
+        console.error("Failed to fetch fresh data:", err)
+        if (!isDataLoaded) {
+          setTimeout(() => setIsDataLoaded(true), 1500)
+        }
       }
     }
-    fetchFeaturedProjects()
+    fetchAllData()
   }, [])
 
   /* ---------------- GSAP ANIMATIONS ---------------- */
@@ -166,6 +219,7 @@ export default function HomePage() {
 
   return (
     <main className="relative bg-black font-zalando min-h-screen text-white overflow-x-hidden">
+      <LoadingScreen isFinished={isDataLoaded} />
 
       {/* HERO */}
       <div className={`relative ${width>=640&&width<1000?"-mt-20":"mt-10"} h-[70vh] lg:h-screen w-full pb-[30vh] sm:pb-0 bg-black overflow-hidden flex items-center justify-center`}>
@@ -253,35 +307,37 @@ export default function HomePage() {
       </div>
 
       {/* PROJECTS */}
-      <section
-        ref={projectsSectionRef}
-        className="xl:mx-auto px-10 cursor-pointer bg-black hover:scale-102 ease-in duration-150 w-full max-w-400 mb-10"
-        onClick={() => router.push("/projects")}
-      >
-        <div className="border-4 h-100 md:h-137 rounded-4xl relative overflow-hidden">
-          <div
-            ref={projectsTextRef}
-            className="text-[30vw] left-[30%] sm:-top-15 absolute lg:top-30 xl:-top-35 md:left-10 font-exorts pointer-events-none select-none"
-          >
-            Projects
-          </div>
+        <section
+          ref={projectsSectionRef}
+          className="xl:mx-auto px-10 cursor-pointer bg-black hover:scale-102 ease-in duration-150 w-full max-w-400 mb-10"
+          onClick={() => router.push("/projects")}
+        >
+          <div className="border-4 h-100 md:h-137 rounded-4xl relative overflow-hidden">
+            <div
+              ref={projectsTextRef}
+              className="text-[30vw] left-[30%] sm:-top-15 absolute lg:top-30 xl:-top-35 md:left-10 font-exorts pointer-events-none select-none"
+            >
+              Projects
+            </div>
 
-          <div className="absolute bottom-10 left-[50%] md:static">
-            <CardSwap cardDistance={60} verticalDistance={70} delay={5000}>
-              {projectData.map((i) => (
-                <Card>
-                  <div className="content text-center bg-zinc-900 rounded-t-xl py-2">
-                    {i.title}
-                  </div>
-                  <div className="imageholder h-80 w-full">
-                    <img src={i.url} className="object-cover h-full w-full" />
-                  </div>
-                </Card>
-              ))}
-            </CardSwap>
+          {projectData.length > 0 && (
+            <div className="absolute bottom-10 left-[50%] md:static">
+              <CardSwap cardDistance={60} verticalDistance={70} delay={5000}>
+                {projectData.map((i) => (
+                  <Card key={i.id}>
+                    <div className="content text-center bg-zinc-900 rounded-t-xl py-2">
+                      {i.title}
+                    </div>
+                    <div className="imageholder h-80 w-full">
+                      <img src={i.url} className="object-cover h-full w-full" alt={i.title} />
+                    </div>
+                  </Card>
+                ))}
+              </CardSwap>
+            </div>
+          )}
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* SKILLS */}
       <section
@@ -322,7 +378,7 @@ export default function HomePage() {
       </section>
       <AboutSection/>
       <div className="py-20" />
-      <JourneyTimeline/>
+      <JourneyTimeline data={timelineData} loading={!isDataLoaded} />
 
       {/* HORIZONTAL SCROLL */}
       <section className="relative z-20 mt-20">

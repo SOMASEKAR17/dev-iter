@@ -55,16 +55,30 @@ const typeStyles: Record<
 };
 
 // ---------------- COMPONENT ----------------
-export default function JourneyTimeline() {
+export default function JourneyTimeline({ 
+  data, 
+  loading: externalLoading 
+}: { 
+  data?: TimelineItem[], 
+  loading?: boolean 
+}) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
   
-  const [timelineData, setTimelineData] = useState<TimelineItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [timelineData, setTimelineData] = useState<TimelineItem[]>(data || []);
+  const [loading, setLoading] = useState(externalLoading !== undefined ? externalLoading : (data ? false : true));
 
   useEffect(() => {
+    // If data is passed as props, prioritize it
+    if (data) {
+      setTimelineData(data);
+      setLoading(externalLoading ?? false);
+      return;
+    }
+
+    // Otherwise fetch internally as fallback
     fetch("/api/timeline")
       .then(res => res.json())
       .then(data => {
@@ -75,7 +89,7 @@ export default function JourneyTimeline() {
         console.error("Failed to fetch timeline:", err);
         setLoading(false);
       });
-  }, []);
+  }, [data, externalLoading]);
 
   useLayoutEffect(() => {
     if (loading || timelineData.length === 0) return;
