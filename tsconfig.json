@@ -27,7 +27,7 @@
         "./src/*"
       ],
       "prisma-client": [
-        "./prisma/client"
+        "./prisma/client/client.ts"
       ]
     }
   },

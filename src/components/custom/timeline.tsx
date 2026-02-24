@@ -55,30 +55,16 @@ const typeStyles: Record<
 };
 
 // ---------------- COMPONENT ----------------
-export default function JourneyTimeline({ 
-  data, 
-  loading: externalLoading 
-}: { 
-  data?: TimelineItem[], 
-  loading?: boolean 
-}) {
+export default function JourneyTimeline() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
   
-  const [timelineData, setTimelineData] = useState<TimelineItem[]>(data || []);
-  const [loading, setLoading] = useState(externalLoading !== undefined ? externalLoading : (data ? false : true));
+  const [timelineData, setTimelineData] = useState<TimelineItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // If data is passed as props, prioritize it
-    if (data) {
-      setTimelineData(data);
-      setLoading(externalLoading ?? false);
-      return;
-    }
-
-    // Otherwise fetch internally as fallback
     fetch("/api/timeline")
       .then(res => res.json())
       .then(data => {
@@ -89,7 +75,7 @@ export default function JourneyTimeline({
         console.error("Failed to fetch timeline:", err);
         setLoading(false);
       });
-  }, [data, externalLoading]);
+  }, []);
 
   useLayoutEffect(() => {
     if (loading || timelineData.length === 0) return;
@@ -182,8 +168,67 @@ export default function JourneyTimeline({
         Journey
       </h2>
 
-      <div className="relative">
-        {/* The persistent vertical line */}
+      <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-x-20">
+        <div className="space-y-24">
+          {timelineData.map((item, i) =>
+            i % 2 === 0 ? (
+              <div
+                key={i}
+                data-side="left"
+                className="
+                    timeline-item
+                    text-left
+                    pl-16 pr-4
+                    lg:text-right lg:pl-0 lg:pr-10
+                    "
+              >
+                <span className="text-sm mx-2 text-gray-400">{item.date}</span>
+                <div
+                  className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full
+                  ${typeStyles[item.type as TimelineType].badge}`}
+                >
+                  <span>{typeStyles[item.type as TimelineType].icon}</span>
+                  <span className="uppercase tracking-wider">{item.type}</span>
+                </div>
+
+                <h3 className="text-xl font-semibold mt-3">{item.title}</h3>
+                <p className="mt-3 text-gray-400 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ) : null
+          )}
+        </div>
+        <div className="space-y-24 mt-24 lg:mt-40">
+          {timelineData.map((item, i) =>
+            i % 2 !== 0 ? (
+              <div
+                key={i}
+                data-side="right"
+                className="
+                    timeline-item
+                    text-left
+                    pl-16 pr-4
+                    lg:text-left lg:pl-10 lg:pr-0
+                    "
+              >
+                <span className="text-sm mx-2 text-gray-400">{item.date}</span>
+                <div
+                  className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full
+                  ${typeStyles[item.type as TimelineType].badge}`}
+                >
+                  <span>{typeStyles[item.type as TimelineType].icon}</span>
+                  <span className="uppercase tracking-wider">{item.type}</span>
+                </div>
+
+                <h3 className="text-xl font-semibold mt-3">{item.title}</h3>
+                <p className="mt-3 text-gray-400 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ) : null
+          )}
+        </div>
         <div
           ref={lineRef}
           className="
@@ -194,17 +239,13 @@ export default function JourneyTimeline({
             h-full
             w-[2px]
             bg-white/10
-            z-0
-          "
+        "
         >
-          {/* Animated Progress Line */}
           <div
             ref={progressRef}
             className="absolute top-0 left-0 w-full bg-white"
             style={{ height: "0%" }}
           />
-          
-          {/* Moving Biker Icon */}
           <div
             ref={iconRef}
             className="
@@ -214,76 +255,25 @@ export default function JourneyTimeline({
               bg-white text-black
               flex items-center justify-center
               font-bold
-              shadow-[0_0_15px_rgba(255,255,255,0.5)]
-              z-30
+              shadow-xl
             "
           >
             <FontAwesomeIcon icon={faPersonBiking} />
           </div>
-        </div>
 
-        {/* Timeline Rows */}
-        <div className="space-y-24 md:space-y-32 relative z-10">
-          {timelineData.map((item, i) => {
-            const isLeft = i % 2 === 0;
-            return (
-              <div
-                key={i}
-                className="timeline-row relative grid grid-cols-1 lg:grid-cols-2 w-full min-h-[120px]"
-              >
-                {/* Individual Dot centered on the line for this item */}
-                <div className="absolute left-6 lg:left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20">
-                  <div className={`w-3 h-3 rounded-full shadow-[0_0_5px_currentColor] ${typeStyles[item.type as TimelineType].dot}`} />
-                </div>
-
-                {/* Left side slot */}
-                <div className="pl-16 lg:pl-0 lg:pr-12">
-                  {isLeft ? (
-                    <div
-                      data-side="left"
-                      className="timeline-item text-left lg:text-right"
-                    >
-                      <span className="text-sm text-gray-400 mr-5">{item.date}</span>
-                      <div className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full ${typeStyles[item.type as TimelineType].badge}`}>
-                        <span>{typeStyles[item.type as TimelineType].icon}</span>
-                        <span className="uppercase tracking-wider">{item.type}</span>
-                      </div>
-                      <h3 className="text-xl font-semibold mt-3">{item.title}</h3>
-                      <p className="mt-3 text-gray-400 leading-relaxed text-sm md:text-base">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ) : (
-                    /* Invisible placeholder for grid stability on desktop */
-                    <div className="hidden lg:block lg:invisible pointer-events-none" aria-hidden="true" />
-                  )}
-                </div>
-
-                {/* Right side slot */}
-                <div className="pl-16 lg:pl-12 mt-8 lg:mt-0">
-                  {!isLeft ? (
-                    <div
-                      data-side="right"
-                      className="timeline-item text-left"
-                    >
-                      <span className="text-sm text-gray-400 mr-5">{item.date}</span>
-                      <div className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full ${typeStyles[item.type as TimelineType].badge}`}>
-                        <span>{typeStyles[item.type as TimelineType].icon}</span>
-                        <span className="uppercase tracking-wider">{item.type}</span>
-                      </div>
-                      <h3 className="text-xl font-semibold mt-3">{item.title}</h3>
-                      <p className="mt-3 text-gray-400 leading-relaxed text-sm md:text-base">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ) : (
-                    /* Invisible placeholder for grid stability on desktop */
-                    <div className="hidden lg:block lg:invisible pointer-events-none" aria-hidden="true" />
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          {timelineData.map((item, i) => (
+            <div
+              key={i}
+              className={`
+                absolute left-1/2 -translate-x-1/2
+                w-3 h-3 rounded-full
+                ${typeStyles[item.type as TimelineType].dot}
+              `}
+              style={{
+                top: `${(i / (timelineData.length - 1)) * 100}%`,
+              }}
+            />
+          ))}
         </div>
       </div>
     </section>

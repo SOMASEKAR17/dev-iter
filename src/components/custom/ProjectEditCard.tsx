@@ -16,7 +16,6 @@ interface Project {
     Github?: string
     linkedIn?: string
   }
-  order: number
 }
 
 export default function ProjectDetailsEditPage({
@@ -43,8 +42,7 @@ export default function ProjectDetailsEditPage({
           description: "",
           gallery: [],
           techstack: {},
-          link: { Github: "", linkedIn: "" },
-          order: 0
+          link: { Github: "", linkedIn: "" }
         })
         return
       }
@@ -182,16 +180,6 @@ export default function ProjectDetailsEditPage({
                 placeholder="Project Description"
                 className="w-full min-h-[120px] rounded-lg bg-white/5 border border-white/10 p-3 outline-none focus:border-white/30 transition shadow-inner"
               />
-              <div className="flex items-center gap-4">
-                <label className="text-xs font-bold text-gray-500 uppercase">Priority / Order:</label>
-                <input
-                  type="number"
-                  value={project.order}
-                  onChange={(e) => setProject(prev => prev ? { ...prev, order: parseInt(e.target.value) || 0 } : null)}
-                  className="w-32 rounded-lg bg-white/5 border border-white/10 p-2 outline-none focus:border-white/30 transition"
-                />
-                <span className="text-[10px] text-gray-500">(Lower number shows first)</span>
-              </div>
             </div>
           </section>
 
