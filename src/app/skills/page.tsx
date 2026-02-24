@@ -7,10 +7,11 @@ import { usePathname } from "next/navigation"
 
 const Page = () => {
   const pathname = usePathname();
-  const [skills, setSkills] = useState<{languages: any[], webDev: any[], aiMl: any[]}>({
+  const [skills, setSkills] = useState<{languages: any[], webDev: any[], aiMl: any[], cloud: any[]}>({
     languages: [],
     webDev: [],
-    aiMl: []
+    aiMl: [],
+    cloud: []
   })
   const [loading, setLoading] = useState(true)
 
@@ -32,6 +33,7 @@ const Page = () => {
   const languagesItems = skills.languages
   const webDevItems = skills.webDev
   const aiMlItems = skills.aiMl
+  const cloudItems = skills.cloud
 
   return (
     <div className="min-h-screen pt-30 pb-20 px-6 bg-black">
@@ -79,6 +81,21 @@ const Page = () => {
           </motion.h1>
           <div className="h-[90vw] sm:h-[60vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw] relative">
             <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={aiMlItems} />
+          </div>
+        </section>
+
+        <section className="relative overflow-hidden border border-white/10 rounded-4xl bg-zinc-900/20 backdrop-blur-sm">
+          <motion.h1
+            key={pathname + "cloud"}
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+            className="text-[15vw] sm:text-[8vw] text-center font-exorts text-white lg:-mb-10"
+          >
+            Cloud & DevOps
+          </motion.h1>
+          <div className="h-[90vw] sm:h-[60vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw] relative">
+            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={cloudItems} />
           </div>
         </section>
       </div>

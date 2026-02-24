@@ -9,7 +9,6 @@ const navigation = [
   { route: "/admin", name: "Dashboard", alt: "admin" },
   { route: "/admin/projects", name: "Projects", alt: "projects" },
   { route: "/admin/skills", name: "Skills", alt: "skills" },
-  { route: "/admin/messages", name: "Messages", alt: "messages" },
   { route: "/", name: "Exit Admin Panel", alt: "exit" },
 ]
 
@@ -37,7 +36,7 @@ const Navbar = () => {
 
       <aside
         className={`
-          fixed lg:static h-screen top-0 left-0 z-50 w-64
+          fixed h-screen top-0 left-0 z-50 w-64
           bg-zinc-800 text-white p-6
           transform transition-transform duration-300
           lg:translate-x-0

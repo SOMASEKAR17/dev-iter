@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { app } from "@/firebase";
 
 import { Save, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 const auth = getAuth(app);
 
@@ -67,7 +68,8 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(config),
       });
-      if (res.ok) alert("Landing page config updated!");
+      if (res.ok) toast.success("Landing page config updated!");
+      else toast.error("Failed to update config");
     } catch (err) {
       console.error(err);
     } finally {
