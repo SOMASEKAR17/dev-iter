@@ -7,12 +7,7 @@ import { usePathname } from "next/navigation"
 
 const Page = () => {
   const pathname = usePathname();
-  const [skills, setSkills] = useState<{languages: any[], webDev: any[], aiMl: any[], cloud: any[]}>({
-    languages: [],
-    webDev: [],
-    aiMl: [],
-    cloud: []
-  })
+  const [skills, setSkills] = useState<Record<string, any[]>>({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -30,74 +25,25 @@ const Page = () => {
     </div>
   )
 
-  const languagesItems = skills.languages
-  const webDevItems = skills.webDev
-  const aiMlItems = skills.aiMl
-  const cloudItems = skills.cloud
-
   return (
     <div className="min-h-screen pt-30 pb-20 px-6 bg-black">
       <div className="grid-cols-1 grid md:grid-cols-2 mx-auto relative gap-10 max-w-350">
-        
-        <section className="relative border border-white/10 rounded-4xl bg-zinc-900/20 backdrop-blur-sm">
-          <motion.h1
-            key={pathname + "lang"}
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-[15vw] sm:text-[8vw] text-center font-exorts text-white lg:-mb-10"
-          >
-            Languages
-          </motion.h1>
-          <div className="h-[80vw] sm:h-[60vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw] relative">
-            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={languagesItems} />
-          </div>
-        </section>
-
-        <section className="relative border border-white/10 rounded-4xl bg-zinc-900/20 backdrop-blur-sm">
-          <motion.h1
-            key={pathname + "web"}
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-            className="text-[15vw] sm:text-[8vw] text-center font-exorts text-white lg:-mb-10"
-          >
-            Web Development
-          </motion.h1>
-          <div className="h-[90vw] sm:h-[65vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw] relative">
-            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={webDevItems} />
-          </div>
-        </section>
-
-        <section className="relative overflow-hidden border border-white/10 rounded-4xl bg-zinc-900/20 backdrop-blur-sm">
-          <motion.h1
-            key={pathname + "ai"}
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="text-[15vw] sm:text-[8vw] text-center font-exorts text-white lg:-mb-10"
-          >
-            AI / Machine Learning
-          </motion.h1>
-          <div className="h-[90vw] sm:h-[60vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw] relative">
-            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={aiMlItems} />
-          </div>
-        </section>
-
-        <section className="relative overflow-hidden border border-white/10 rounded-4xl bg-zinc-900/20 backdrop-blur-sm">
-          <motion.h1
-            key={pathname + "cloud"}
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-            className="text-[15vw] sm:text-[8vw] text-center font-exorts text-white lg:-mb-10"
-          >
-            Cloud & DevOps
-          </motion.h1>
-          <div className="h-[90vw] sm:h-[60vw] md:h-[45vw] lg:h-[40vw] xl:h-[35vw] relative">
-            <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={cloudItems} />
-          </div>
-        </section>
+        {Object.entries(skills).map(([category, items], index) => (
+          <section key={category} className="relative border border-white/10 rounded-4xl bg-zinc-900/20 backdrop-blur-sm overflow-hidden">
+            <motion.h1
+              key={pathname + category}
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
+              className="text-[15vw] sm:text-[8vw] text-center font-exorts text-white lg:-mb-10 px-4 capitalize"
+            >
+              {category.replace(/([A-Z])/g, ' $1').trim()}
+            </motion.h1>
+            <div className="h-[80vw] sm:h-[65vw] md:h-[47vw] lg:h-[40vw] xl:h-[35vw] relative">
+              <FlowingMenu marqueeTextColor={"#aaaeb5"} marqueeBgColor={"#393e47"} items={items} />
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   )

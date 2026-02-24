@@ -82,3 +82,23 @@ export async function PATCH(request: Request) {
         return NextResponse.json({ error: "Failed to update skills" }, { status: 500 })
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const { searchParams } = new URL(request.url)
+        const category = searchParams.get("category")
+
+        if (!category) {
+            return NextResponse.json({ error: "Category is required" }, { status: 400 })
+        }
+
+        await prisma.skillCategory.delete({
+            where: { id: category }
+        })
+
+        return NextResponse.json({ success: true })
+    } catch (error) {
+        console.error("Error deleting category:", error)
+        return NextResponse.json({ error: "Failed to delete category" }, { status: 500 })
+    }
+}
