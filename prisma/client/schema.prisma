@@ -18,8 +18,8 @@ model Project {
 }
 
 model SkillCategory {
-  id     String  @id
-  items  Json
+  id    String @id
+  items Json
 }
 
 model Config {

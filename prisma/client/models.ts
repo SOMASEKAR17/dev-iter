@@ -11,4 +11,5 @@
 export type * from './models/Project'
 export type * from './models/SkillCategory'
 export type * from './models/Config'
+export type * from './models/TimelineItem'
 export type * from './commonInputTypes'

@@ -16,6 +16,13 @@ declare global {
     var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
+// Clear if stale (manual check for new model)
+const prismaInstance = globalThis.prisma;
+// @ts-ignore
+if (prismaInstance && !prismaInstance.timelineItem) {
+    globalThis.prisma = undefined;
+}
+
 const prisma = globalThis.prisma ?? prismaClientSingleton();
 
 export default prisma;

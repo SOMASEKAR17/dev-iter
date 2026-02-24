@@ -386,7 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Project: 'Project',
   SkillCategory: 'SkillCategory',
-  Config: 'Config'
+  Config: 'Config',
+  TimelineItem: 'TimelineItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "project" | "skillCategory" | "config"
+    modelProps: "project" | "skillCategory" | "config" | "timelineItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -628,6 +629,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TimelineItem: {
+      payload: Prisma.$TimelineItemPayload<ExtArgs>
+      fields: Prisma.TimelineItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TimelineItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TimelineItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>
+        }
+        findFirst: {
+          args: Prisma.TimelineItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TimelineItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>
+        }
+        findMany: {
+          args: Prisma.TimelineItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>[]
+        }
+        create: {
+          args: Prisma.TimelineItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>
+        }
+        createMany: {
+          args: Prisma.TimelineItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TimelineItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>[]
+        }
+        delete: {
+          args: Prisma.TimelineItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>
+        }
+        update: {
+          args: Prisma.TimelineItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.TimelineItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TimelineItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TimelineItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.TimelineItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimelineItemPayload>
+        }
+        aggregate: {
+          args: Prisma.TimelineItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimelineItem>
+        }
+        groupBy: {
+          args: Prisma.TimelineItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimelineItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TimelineItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimelineItemCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -694,6 +769,18 @@ export const ConfigScalarFieldEnum = {
 } as const
 
 export type ConfigScalarFieldEnum = (typeof ConfigScalarFieldEnum)[keyof typeof ConfigScalarFieldEnum]
+
+
+export const TimelineItemScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  title: 'title',
+  type: 'type',
+  desc: 'desc',
+  order: 'order'
+} as const
+
+export type TimelineItemScalarFieldEnum = (typeof TimelineItemScalarFieldEnum)[keyof typeof TimelineItemScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -773,6 +860,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -873,6 +974,7 @@ export type GlobalOmitConfig = {
   project?: Prisma.ProjectOmit
   skillCategory?: Prisma.SkillCategoryOmit
   config?: Prisma.ConfigOmit
+  timelineItem?: Prisma.TimelineItemOmit
 }
 
 /* Types for Logging */
