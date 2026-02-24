@@ -1,11 +1,10 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPersonBiking } from "@fortawesome/free-solid-svg-icons";
-import { type IconType } from "react-icons/lib";
 import { ReactNode } from "react";
 import { SiTryhackme } from "react-icons/si";
 import { AiOutlineFundProjectionScreen } from "react-icons/ai";
@@ -17,57 +16,12 @@ gsap.registerPlugin(ScrollTrigger);
 type TimelineType = "hackathon" | "internship" | "project" | "club";
 
 interface TimelineItem {
+  id: string;
   date: string;
   title: string;
   type: TimelineType;
   desc: string;
 }
-
-// ---------------- DATA ----------------
-const timelineData: TimelineItem[] = [
-  {
-    date: "Nov 2024",
-    title: "Runner-Up – Python API Hackathon",
-    type: "hackathon",
-    desc: "Secured Runner-Up position at the MIDAS Python API Hackathon by building API-based automation tools that improved integration and efficiency in civil engineering software systems.",
-  },
-  {
-    date: "Apr 2025",
-    title: "1st Runner-Up – CodeDoc 2.0 Hackathon",
-    type: "hackathon",
-    desc: "Won 1st Runner-Up at the IEEE PES CodeDoc 2.0 Hackathon by developing a full-stack financial management platform with interactive analytics and real-time investment insights.",
-  },
-  {
-    date: "May 2025",
-    title: "FintechX – Full Stack Project",
-    type: "project",
-    desc: "Built a full-stack financial management platform with EMI/SIP calculators, real-time financial news, and an AI-powered chatbot using React, Node.js, Express, MongoDB, and Flask with secure JWT-based authentication.",
-  },
-  {
-    date: "May – Aug 2025",
-    title: "GenReal AI – Frontend Developer Intern",
-    type: "internship",
-    desc: "Worked as a Frontend Developer Intern, building scalable UI systems using React, Tailwind CSS, and GSAP. Improved performance with lazy loading, code splitting, and modular component architecture.",
-  },
-  {
-    date: "Aug 2025",
-    title: "Rental Price Prediction – ML Project",
-    type: "project",
-    desc: "Developed a machine learning model to predict rental prices using historical housing data, applying feature engineering and regression techniques with Python and Scikit-Learn.",
-  },
-  {
-    date: "Sep 2025",
-    title: "Crowder.AI – AI Simulation Platform",
-    type: "project",
-    desc: "Built an AI-driven project simulation platform with real-time 3D visualization using Three.js. Optimized frontend performance and synchronization, reducing load times by 40%.",
-  },
-  {
-    date: "Nov 2025 – Present",
-    title: "CodeChef VIT – Senior Core Member",
-    type: "club",
-    desc: "Serving as a Senior Core Member and Full Stack Web Developer, contributing to large-scale platforms used by thousands of students while mentoring juniors and supporting major technical events.",
-  },
-];
 
 // ---------------- STYLE MAP ----------------
 const typeStyles: Record<
@@ -106,8 +60,26 @@ export default function JourneyTimeline() {
   const lineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
+  
+  const [timelineData, setTimelineData] = useState<TimelineItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/timeline")
+      .then(res => res.json())
+      .then(data => {
+        setTimelineData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to fetch timeline:", err);
+        setLoading(false);
+      });
+  }, []);
 
   useLayoutEffect(() => {
+    if (loading || timelineData.length === 0) return;
+
     const ctx = gsap.context(() => {
       // LINE GROW
       gsap.fromTo(
@@ -177,13 +149,20 @@ export default function JourneyTimeline() {
       });
     }, sectionRef);
 
+    // 🔥 Force refresh for layout stability
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+
     return () => ctx.revert();
-  }, []);
+  }, [loading, timelineData]);
+
+  if (loading) return null;
 
   return (
     <section
       ref={sectionRef}
-      className="relative bg-black mx-auto max-w-7xl px-6 pb-20 md:pb-5"
+      className="relative z-10 bg-black mx-auto max-w-7xl px-6 pb-40 md:pb-60 pt-20 overflow-hidden"
     >
       <h2 className="font-exorts text-center text-[20vw] lg:text-[10vw] mb-24">
         Journey
@@ -196,7 +175,6 @@ export default function JourneyTimeline() {
               <div
                 key={i}
                 data-side="left"
-                data-type={item.type}
                 className="
                     timeline-item
                     text-left
@@ -207,9 +185,9 @@ export default function JourneyTimeline() {
                 <span className="text-sm mx-2 text-gray-400">{item.date}</span>
                 <div
                   className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full
-                  ${typeStyles[item.type].badge}`}
+                  ${typeStyles[item.type as TimelineType].badge}`}
                 >
-                  <span>{typeStyles[item.type].icon}</span>
+                  <span>{typeStyles[item.type as TimelineType].icon}</span>
                   <span className="uppercase tracking-wider">{item.type}</span>
                 </div>
 
@@ -227,7 +205,6 @@ export default function JourneyTimeline() {
               <div
                 key={i}
                 data-side="right"
-                data-type={item.type}
                 className="
                     timeline-item
                     text-left
@@ -238,9 +215,9 @@ export default function JourneyTimeline() {
                 <span className="text-sm mx-2 text-gray-400">{item.date}</span>
                 <div
                   className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full
-                  ${typeStyles[item.type].badge}`}
+                  ${typeStyles[item.type as TimelineType].badge}`}
                 >
-                  <span>{typeStyles[item.type].icon}</span>
+                  <span>{typeStyles[item.type as TimelineType].icon}</span>
                   <span className="uppercase tracking-wider">{item.type}</span>
                 </div>
 
@@ -290,7 +267,7 @@ export default function JourneyTimeline() {
               className={`
                 absolute left-1/2 -translate-x-1/2
                 w-3 h-3 rounded-full
-                ${typeStyles[item.type].dot}
+                ${typeStyles[item.type as TimelineType].dot}
               `}
               style={{
                 top: `${(i / (timelineData.length - 1)) * 100}%`,
