@@ -52,6 +52,10 @@ export default function ProjectsPage() {
     fetchProjects()
   }, [])
 
+  useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "instant" })
+}, [pathname])
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#060818] text-white">

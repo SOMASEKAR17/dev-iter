@@ -243,7 +243,7 @@ export default function JourneyTimeline({
                       data-side="left"
                       className="timeline-item text-left lg:text-right"
                     >
-                      <span className="text-sm text-gray-400">{item.date}</span>
+                      <span className="text-sm text-gray-400 mr-5">{item.date}</span>
                       <div className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full ${typeStyles[item.type as TimelineType].badge}`}>
                         <span>{typeStyles[item.type as TimelineType].icon}</span>
                         <span className="uppercase tracking-wider">{item.type}</span>
@@ -266,7 +266,7 @@ export default function JourneyTimeline({
                       data-side="right"
                       className="timeline-item text-left"
                     >
-                      <span className="text-sm text-gray-400">{item.date}</span>
+                      <span className="text-sm text-gray-400 mr-5">{item.date}</span>
                       <div className={`inline-flex items-center gap-2 mt-2 px-3 py-1 text-xs border rounded-full ${typeStyles[item.type as TimelineType].badge}`}>
                         <span>{typeStyles[item.type as TimelineType].icon}</span>
                         <span className="uppercase tracking-wider">{item.type}</span>
