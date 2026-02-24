@@ -54,3 +54,8 @@ export type SkillCategory = Prisma.SkillCategoryModel
  * 
  */
 export type Config = Prisma.ConfigModel
+/**
+ * Model TimelineItem
+ * 
+ */
+export type TimelineItem = Prisma.TimelineItemModel

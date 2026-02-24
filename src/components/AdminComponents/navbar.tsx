@@ -9,6 +9,7 @@ const navigation = [
   { route: "/admin", name: "Dashboard", alt: "admin" },
   { route: "/admin/projects", name: "Projects", alt: "projects" },
   { route: "/admin/skills", name: "Skills", alt: "skills" },
+  { route: "/admin/timeline", name: "Journey", alt: "timeline" },
   { route: "/", name: "Exit Admin Panel", alt: "exit" },
 ]
 

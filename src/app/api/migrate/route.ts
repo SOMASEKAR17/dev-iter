@@ -190,6 +190,7 @@ const DEFAULT_SKILLS = {
     ]
 }
 
+
 const DEFAULT_CONFIG = {
     featuredProjects: [
         { id: "1", title: "CROWDER.AI", url: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238803/Screenshot_2026-01-12_201642_sej9ra.png" },
@@ -197,6 +198,58 @@ const DEFAULT_CONFIG = {
         { id: "3", title: "GENREAL.AI", url: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238810/Screenshot_2026-01-12_203637_qj96vy.png" }
     ]
 }
+
+const DEFAULT_TIMELINE = [
+    {
+        date: "Nov 2024",
+        title: "Runner-Up – Python API Hackathon",
+        type: "hackathon",
+        desc: "Secured Runner-Up position at the MIDAS Python API Hackathon by building API-based automation tools that improved integration and efficiency in civil engineering software systems.",
+        order: 0
+    },
+    {
+        date: "Apr 2025",
+        title: "1st Runner-Up – CodeDoc 2.0 Hackathon",
+        type: "hackathon",
+        desc: "Won 1st Runner-Up at the IEEE PES CodeDoc 2.0 Hackathon by developing a full-stack financial management platform with interactive analytics and real-time investment insights.",
+        order: 1
+    },
+    {
+        date: "May 2025",
+        title: "FintechX – Full Stack Project",
+        type: "project",
+        desc: "Built a full-stack financial management platform with EMI/SIP calculators, real-time financial news, and an AI-powered chatbot using React, Node.js, Express, MongoDB, and Flask with secure JWT-based authentication.",
+        order: 2
+    },
+    {
+        date: "May – Aug 2025",
+        title: "GenReal AI – Frontend Developer Intern",
+        type: "internship",
+        desc: "Worked as a Frontend Developer Intern, building scalable UI systems using React, Tailwind CSS, and GSAP. Improved performance with lazy loading, code splitting, and modular component architecture.",
+        order: 3
+    },
+    {
+        date: "Aug 2025",
+        title: "Rental Price Prediction – ML Project",
+        type: "project",
+        desc: "Developed a machine learning model to predict rental prices using historical housing data, applying feature engineering and regression techniques with Python and Scikit-Learn.",
+        order: 4
+    },
+    {
+        date: "Sep 2025",
+        title: "Crowder.AI – AI Simulation Platform",
+        type: "project",
+        desc: "Built an AI-driven project simulation platform with real-time 3D visualization using Three.js. Optimized frontend performance and synchronization, reducing load times by 40%.",
+        order: 5
+    },
+    {
+        date: "Nov 2025 – Present",
+        title: "CodeChef VIT – Senior Core Member",
+        type: "club",
+        desc: "Serving as a Senior Core Member and Full Stack Web Developer, contributing to large-scale platforms used by thousands of students while mentoring juniors and supporting major technical events.",
+        order: 6
+    },
+]
 
 export async function GET() {
     try {
@@ -224,6 +277,15 @@ export async function GET() {
             update: { content: DEFAULT_CONFIG },
             create: { id: "landing", content: DEFAULT_CONFIG }
         });
+
+        // 4. Migrate Timeline
+        for (const item of DEFAULT_TIMELINE) {
+            await prisma.timelineItem.upsert({
+                where: { id: item.title.substring(0, 10).replace(/\s/g, '') }, // temporary id for migration
+                update: item,
+                create: { ...item, id: item.title.substring(0, 10).replace(/\s/g, '') }
+            });
+        }
 
         return NextResponse.json({ success: true, message: "Prisma migration successful" })
     } catch (error: any) {

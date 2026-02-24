@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Project: 'Project',
   SkillCategory: 'SkillCategory',
-  Config: 'Config'
+  Config: 'Config',
+  TimelineItem: 'TimelineItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -99,6 +100,18 @@ export const ConfigScalarFieldEnum = {
 } as const
 
 export type ConfigScalarFieldEnum = (typeof ConfigScalarFieldEnum)[keyof typeof ConfigScalarFieldEnum]
+
+
+export const TimelineItemScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  title: 'title',
+  type: 'type',
+  desc: 'desc',
+  order: 'order'
+} as const
+
+export type TimelineItemScalarFieldEnum = (typeof TimelineItemScalarFieldEnum)[keyof typeof TimelineItemScalarFieldEnum]
 
 
 export const SortOrder = {
