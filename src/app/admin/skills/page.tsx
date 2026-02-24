@@ -4,8 +4,9 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getAuth, onAuthStateChanged, User } from "firebase/auth"
 import { app } from "@/firebase"
-import { motion } from "framer-motion"
-import { Plus, Trash, Save, Loader2 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Plus, Trash, Save, Loader2, X } from "lucide-react"
+import toast from "react-hot-toast"
 
 const auth = getAuth(app)
 const ALLOWED_EMAIL = "somasekarnaidu79@gmail.com"
@@ -16,11 +17,7 @@ interface SkillItem {
   image: string;
 }
 
-interface SkillsState {
-  languages: SkillItem[];
-  webDev: SkillItem[];
-  aiMl: SkillItem[];
-}
+type SkillsState = Record<string, SkillItem[]>;
 
 export default function AdminSkillsPage() {
   const router = useRouter()
@@ -28,6 +25,8 @@ export default function AdminSkillsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState<string | null>(null)
   const [skills, setSkills] = useState<SkillsState | null>(null)
+  const [newCategoryName, setNewCategoryName] = useState("")
+  const [showAddCategory, setShowAddCategory] = useState(false)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -51,7 +50,7 @@ export default function AdminSkillsPage() {
     }
   }
 
-  const handleCloudinaryUpload = (category: keyof SkillsState, index: number) => {
+  const handleCloudinaryUpload = (category: string, index: number) => {
     // @ts-ignore
     const widget = window.cloudinary.createUploadWidget(
       {
@@ -67,28 +66,49 @@ export default function AdminSkillsPage() {
     widget.open();
   }
 
-  const updateSkill = (category: keyof SkillsState, index: number, field: keyof SkillItem, value: string) => {
+  const updateSkill = (category: string, index: number, field: keyof SkillItem, value: string) => {
     if (!skills) return
     const updated = { ...skills }
     updated[category][index] = { ...updated[category][index], [field]: value }
     setSkills(updated)
   }
 
-  const removeSkill = (category: keyof SkillsState, index: number) => {
+  const removeSkill = (category: string, index: number) => {
     if (!skills) return
     const updated = { ...skills }
     updated[category] = updated[category].filter((_, i) => i !== index)
     setSkills(updated)
   }
 
-  const addSkill = (category: keyof SkillsState) => {
+  const addSkill = (category: string) => {
     if (!skills) return
     const updated = { ...skills }
     updated[category] = [...updated[category], { link: "#", text: "New Skill", image: "" }]
     setSkills(updated)
   }
 
-  const saveCategory = async (category: keyof SkillsState) => {
+  const addCategory = () => {
+    if (!newCategoryName.trim()) return
+    const id = newCategoryName.toLowerCase().replace(/\s+/g, '')
+    if (skills && skills[id]) {
+      toast.error("Category already exists")
+      return
+    }
+    setSkills({ ...skills, [id]: [] })
+    setNewCategoryName("")
+    setShowAddCategory(false)
+    toast.success(`Category "${newCategoryName}" added!`)
+  }
+
+  const removeCategory = (category: string) => {
+    if (!confirm(`Are you sure you want to delete the "${category}" category?`)) return
+    const updated = { ...skills }
+    delete updated[category]
+    setSkills(updated)
+    toast.success("Category removed locally. Save to apply.")
+  }
+
+  const saveCategory = async (category: string) => {
     if (!skills) return
     setSaving(category)
     try {
@@ -98,11 +118,13 @@ export default function AdminSkillsPage() {
         body: JSON.stringify({ category, items: skills[category] }),
       })
       if (res.ok) {
-        alert(`${category} saved successfully!`)
+        toast.success(`${category} saved successfully!`)
+      } else {
+        toast.error("Failed to save")
       }
     } catch (err) {
       console.error(err)
-      alert("Failed to save")
+      toast.error("An error occurred while saving")
     } finally {
       setSaving(null)
     }
@@ -122,14 +144,31 @@ export default function AdminSkillsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl font-bold mb-8">Manage Skills</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Manage Skills</h1>
+          <button 
+            onClick={() => setShowAddCategory(true)}
+            className="flex items-center gap-2 bg-zinc-800 border border-white/10 px-4 py-2 rounded-xl text-sm font-bold hover:bg-zinc-700 transition"
+          >
+            <Plus size={18} />
+            New Category
+          </button>
+        </div>
 
-        <div className="space-y-12">
-          {(["languages", "webDev", "aiMl"] as const).map((category) => (
-            <section key={category} className="bg-zinc-900/50 rounded-2xl border border-white/10 p-6 backdrop-blur-sm">
+        <div className="space-y-12 pb-20">
+          {Object.entries(skills).map(([category, items]) => (
+            <section key={category} className="bg-zinc-900/50 rounded-2xl border border-white/10 p-6 backdrop-blur-sm relative group/section">
+              <button 
+                onClick={() => removeCategory(category)}
+                className="absolute top-6 right-40 p-2 text-white/20 hover:text-red-500 opacity-0 group-hover/section:opacity-100 transition"
+                title="Delete Category"
+              >
+                <Trash size={16} />
+              </button>
+
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold capitalize">
-                  {category === 'languages' ? 'Languages' : category === 'webDev' ? 'Web Development' : 'AI / Machine Learning'}
+                  {category.replace(/([A-Z])/g, ' $1').trim()}
                 </h2>
                 <button 
                   onClick={() => saveCategory(category)}
@@ -142,7 +181,7 @@ export default function AdminSkillsPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {skills[category].map((item, i) => (
+                {items.map((item: any, i: number) => (
                   <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 group hover:border-white/20 transition">
                     <div className="space-y-3">
                       <div>
@@ -150,7 +189,7 @@ export default function AdminSkillsPage() {
                         <input 
                           value={item.text}
                           onChange={(e) => updateSkill(category, i, "text", e.target.value)}
-                          className="w-full bg-black/30 border border-white/10 rounded p-2 text-sm outline-none"
+                          className="w-full bg-black/30 border border-white/10 rounded p-2 text-sm outline-none focus:border-white/30"
                         />
                       </div>
                       <div>
@@ -158,12 +197,12 @@ export default function AdminSkillsPage() {
                         <input 
                           value={item.image}
                           onChange={(e) => updateSkill(category, i, "image", e.target.value)}
-                          className="w-full bg-black/30 border border-white/10 rounded p-2 text-xs outline-none"
+                          className="w-full bg-black/30 border border-white/10 rounded p-2 text-xs outline-none focus:border-white/30"
                         />
                       </div>
                       <div className="flex items-center justify-between pt-2">
                         <div className="flex items-center gap-2">
-                          <img src={item.image} className="w-8 h-8 object-contain opacity-50" alt="" />
+                          {item.image && <img src={item.image} className="w-8 h-8 object-contain opacity-50 transition hover:opacity-100" alt="" />}
                           <button 
                             onClick={() => handleCloudinaryUpload(category, i)}
                             className="text-[10px] bg-white/10 hover:bg-white/20 px-2 py-1 rounded transition"
@@ -173,7 +212,7 @@ export default function AdminSkillsPage() {
                         </div>
                         <button 
                           onClick={() => removeSkill(category, i)}
-                          className="p-2 text-red-500/50 hover:text-red-500"
+                          className="p-2 text-red-500/50 hover:text-red-500 transition"
                         >
                           <Trash size={16} />
                         </button>
@@ -193,6 +232,57 @@ export default function AdminSkillsPage() {
           ))}
         </div>
       </motion.div>
+
+      {/* Add Category Modal */}
+      <AnimatePresence>
+        {showAddCategory && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-md bg-black/60">
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-zinc-900 border border-white/10 p-8 rounded-3xl w-full max-w-md shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold">New Skill Category</h3>
+                <button onClick={() => setShowAddCategory(false)} className="text-gray-500 hover:text-white">
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs text-gray-500 uppercase font-bold mb-2 block">Category Name</label>
+                  <input 
+                    autoFocus
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    placeholder="e.g. Databases, Tools, DevOps"
+                    className="w-full bg-black border border-white/10 rounded-xl p-3 outline-none focus:border-white/30 transition"
+                    onKeyDown={(e) => e.key === 'Enter' && addCategory()}
+                  />
+                  <p className="text-[10px] text-gray-600 mt-2 italic">A new section will be created instantly.</p>
+                </div>
+                
+                <div className="flex gap-3 pt-4">
+                  <button 
+                    onClick={() => setShowAddCategory(false)}
+                    className="flex-1 px-4 py-3 rounded-xl border border-white/10 hover:bg-white/5 transition font-bold text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={addCategory}
+                    className="flex-1 px-4 py-3 rounded-xl bg-white text-black hover:bg-gray-200 transition font-bold text-sm"
+                  >
+                    Create
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
