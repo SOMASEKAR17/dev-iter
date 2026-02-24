@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
-import { db } from "@/firebase/Database/db"
-import { ref, get, set } from "firebase/database"
+import prisma from "@/lib/prisma"
 
 const DEFAULT_SKILLS = {
     languages: [
@@ -21,16 +20,15 @@ const DEFAULT_SKILLS = {
 
 export async function GET() {
     try {
-        const snapshot = await get(ref(db, "skills"))
-        const val = snapshot.val()
+        const categories = await prisma.skillCategory.findMany()
 
-        if (!val) {
+        if (categories.length === 0) {
             return NextResponse.json(DEFAULT_SKILLS)
         }
 
         const skills: any = {}
-        Object.entries(val).forEach(([id, data]: [string, any]) => {
-            skills[id] = data.items
+        categories.forEach((cat: any) => {
+            skills[cat.id] = (cat.items as any).items || cat.items
         })
 
         return NextResponse.json({ ...DEFAULT_SKILLS, ...skills })
@@ -49,7 +47,11 @@ export async function PATCH(request: Request) {
             return NextResponse.json({ error: "Category and items are required" }, { status: 400 })
         }
 
-        await set(ref(db, `skills/${category}`), { items })
+        await prisma.skillCategory.upsert({
+            where: { id: category },
+            update: { items: { items } },
+            create: { id: category, items: { items } }
+        })
 
         return NextResponse.json({ success: true })
     } catch (error) {
