@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./client"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -15,6 +15,7 @@ model Project {
   gallery     String[]
   techstack   Json
   link        Json
+  order       Int      @default(0)
 }
 
 model SkillCategory {
