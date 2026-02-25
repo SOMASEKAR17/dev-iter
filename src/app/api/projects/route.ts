@@ -3,7 +3,9 @@ import prisma from "@/lib/prisma"
 
 export async function GET() {
   try {
-    const projects = await prisma.project.findMany()
+    const projects = await prisma.project.findMany({
+      orderBy: { order: 'asc' }
+    })
     return NextResponse.json(projects)
   } catch (error) {
     console.error("Error fetching projects:", error)
