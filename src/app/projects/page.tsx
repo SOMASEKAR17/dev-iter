@@ -87,7 +87,7 @@ export default function ProjectsPage() {
     { id: "16", img: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_200937_vlaaiu.png", url: "#", height: 520 },
     { id: "17", img: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238820/Screenshot_2026-01-12_200610_lknc8a.png", url: "#", height: 440 },
     { id: "18", img: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238809/Screenshot_2026-01-12_223848_df2qyq.png", url: "#", height: 550 },
-    { id: "19", img: "hhttps://res.cloudinary.com/di97k34d0/image/upload/v1768238804/Screenshot_2026-01-12_222800_qtswov.png", url: "#", height: 350 },
+    { id: "19", img: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238804/Screenshot_2026-01-12_222800_qtswov.png", url: "#", height: 350 },
     { id: "20", img: "https://res.cloudinary.com/di97k34d0/image/upload/v1768238818/Screenshot_2026-01-12_224016_f8aur8.png", url: "#", height: 480 },
   ]
 
