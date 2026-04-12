@@ -169,6 +169,30 @@ export default function ProjectDetailsEditPage({
     }
   }
 
+  const handleDelete = async () => {
+    if (!project) return
+    const confirmed = confirm("Are you sure you want to delete this project?")
+    if (!confirmed) return
+
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/projects?id=${project.id}`, {
+        method: "DELETE",
+      })
+      if (res.ok) {
+        setOpenCard(false)
+        window.location.reload()
+      } else {
+        alert("Failed to delete project")
+      }
+    } catch (err) {
+      console.error(err)
+      alert("Error deleting project")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleCloudinaryUpload = () => {
     // @ts-ignore
     const widget = window.cloudinary.createUploadWidget(
@@ -322,13 +346,24 @@ export default function ProjectDetailsEditPage({
           </section>
         </div>
 
-        <button 
-          onClick={handleSave}
-          disabled={loading}
-          className="mt-12 w-full rounded-2xl bg-white text-black py-5 font-black text-lg hover:scale-[0.98] transition-all disabled:opacity-50 shadow-xl shadow-white/5"
-        >
-          {loading ? "SAVING..." : "SAVE CHANGES"}
-        </button>
+        <div className="mt-12 flex gap-4">
+          {!id.startsWith("new-") && (
+            <button
+              onClick={handleDelete}
+              disabled={loading}
+              className="w-1/3 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/20 py-5 font-black text-lg hover:bg-red-600/30 transition-all disabled:opacity-50"
+            >
+              DELETE
+            </button>
+          )}
+          <button 
+            onClick={handleSave}
+            disabled={loading}
+            className="flex-1 rounded-2xl bg-white text-black py-5 font-black text-lg hover:scale-[0.98] transition-all disabled:opacity-50 shadow-xl shadow-white/5"
+          >
+            {loading ? "SAVING..." : "SAVE CHANGES"}
+          </button>
+        </div>
       </motion.div>
     </div>
   )
