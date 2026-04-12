@@ -58,8 +58,36 @@ export default function ProjectsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#060818] text-white">
-        Loading projects...
+      <div className="flex min-h-screen items-center justify-center bg-[#060818] text-white overflow-hidden">
+        <style>
+          {`
+            @keyframes animate-mask {
+              0% { width: 0%; }
+              100% { width: 100%; }
+            }
+            .loading-text {
+              position: relative;
+              color: transparent;
+              -webkit-text-stroke: 2px white;
+            }
+            .loading-text::before {
+              content: attr(data-text);
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 0%;
+              height: 100%;
+              color: white;
+              -webkit-text-stroke: 0px transparent;
+              overflow: hidden;
+              animation: animate-mask 3s ease-in-out infinite;
+              white-space: nowrap;
+            }
+          `}
+        </style>
+        <h1 data-text="Projects" className="loading-text font-exorts text-[5vw] font-bold">
+          Projects...
+        </h1>
       </div>
     )
   }
