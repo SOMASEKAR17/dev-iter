@@ -29,6 +29,7 @@ export default function ProjectDetailsEditPage({
 }) {
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
+  const [isNewProject, setIsNewProject] = useState(false)
   const overlayRef = useRef<HTMLDivElement>(null)
 
   const [loading, setLoading] = useState(false)
@@ -74,7 +75,19 @@ export default function ProjectDetailsEditPage({
 
   useEffect(() => {
     const fetchProject = async () => {
-      if (id.startsWith("new-")) {
+      const res = await fetch("/api/projects")
+      const data = await res.json()
+      const found = data.find((e: any) => e.id === id)
+      
+      if (found) {
+        // Normalize link
+        const normalizedLink = typeof found.link === 'string' 
+          ? { Github: found.link !== '#' ? found.link : '', linkedIn: '' }
+          : { Github: found.link?.Github || '', linkedIn: found.link?.linkedIn || '' };
+        setProject({ ...found, link: normalizedLink })
+        setIsNewProject(false)
+      } else {
+        // Not found, must be for creating a new project
         setProject({
           id,
           createdAt: new Date().toISOString().split('T')[0],
@@ -85,17 +98,7 @@ export default function ProjectDetailsEditPage({
           link: { Github: "", linkedIn: "" },
           order: 0
         })
-        return
-      }
-      const res = await fetch("/api/projects")
-      const data = await res.json()
-      const found = data.find((e: any) => e.id === id)
-      if (found) {
-        // Normalize link
-        const normalizedLink = typeof found.link === 'string' 
-          ? { Github: found.link !== '#' ? found.link : '', linkedIn: '' }
-          : { Github: found.link?.Github || '', linkedIn: found.link?.linkedIn || '' };
-        setProject({ ...found, link: normalizedLink })
+        setIsNewProject(true)
       }
     }
     fetchProject()
@@ -228,7 +231,7 @@ export default function ProjectDetailsEditPage({
           <X size={18} />
         </button>
 
-        <h1 className="text-3xl font-bold mb-6">{id.startsWith('new-') ? 'Add Project' : 'Edit Project'}</h1>
+        <h1 className="text-3xl font-bold mb-6">{isNewProject ? 'Add Project' : 'Edit Project'}</h1>
 
         <div className="space-y-8">
           <section>
@@ -347,7 +350,7 @@ export default function ProjectDetailsEditPage({
         </div>
 
         <div className="mt-12 flex gap-4">
-          {!id.startsWith("new-") && (
+          {!isNewProject && (
             <button
               onClick={handleDelete}
               disabled={loading}
