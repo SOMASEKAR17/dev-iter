@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { X, Plus, Trash } from "lucide-react"
+import { useLenis } from "lenis/react"
 
 interface Project {
   id: string
@@ -28,14 +29,65 @@ export default function ProjectDetailsEditPage({
 }) {
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
+  const [isNewProject, setIsNewProject] = useState(false)
+  const overlayRef = useRef<HTMLDivElement>(null)
 
   const [loading, setLoading] = useState(false)
   const [newTechKey, setNewTechKey] = useState("")
   const [newTechValue, setNewTechValue] = useState("")
 
+  // Stop Lenis smooth scroll while modal is open
+  const lenis = useLenis()
+  useEffect(() => {
+    if (lenis) {
+      lenis.stop()
+    }
+    document.documentElement.style.overflow = "hidden"
+    document.body.style.overflow = "hidden"
+    return () => {
+      if (lenis) {
+        lenis.start()
+      }
+      document.documentElement.style.overflow = ""
+      document.body.style.overflow = ""
+    }
+  }, [lenis])
+
+  // Prevent wheel events from reaching Lenis / background
+  useEffect(() => {
+    const overlay = overlayRef.current
+    if (!overlay) return
+
+    const stopWheel = (e: WheelEvent) => {
+      e.stopPropagation()
+    }
+    const stopTouch = (e: TouchEvent) => {
+      e.stopPropagation()
+    }
+
+    overlay.addEventListener("wheel", stopWheel, { passive: false })
+    overlay.addEventListener("touchmove", stopTouch, { passive: false })
+    return () => {
+      overlay.removeEventListener("wheel", stopWheel)
+      overlay.removeEventListener("touchmove", stopTouch)
+    }
+  }, [project])
+
   useEffect(() => {
     const fetchProject = async () => {
-      if (id.startsWith("new-")) {
+      const res = await fetch("/api/projects")
+      const data = await res.json()
+      const found = data.find((e: any) => e.id === id)
+      
+      if (found) {
+        // Normalize link
+        const normalizedLink = typeof found.link === 'string' 
+          ? { Github: found.link !== '#' ? found.link : '', linkedIn: '' }
+          : { Github: found.link?.Github || '', linkedIn: found.link?.linkedIn || '' };
+        setProject({ ...found, link: normalizedLink })
+        setIsNewProject(false)
+      } else {
+        // Not found, must be for creating a new project
         setProject({
           id,
           createdAt: new Date().toISOString().split('T')[0],
@@ -46,17 +98,7 @@ export default function ProjectDetailsEditPage({
           link: { Github: "", linkedIn: "" },
           order: 0
         })
-        return
-      }
-      const res = await fetch("/api/projects")
-      const data = await res.json()
-      const found = data.find((e: any) => e.id === id)
-      if (found) {
-        // Normalize link
-        const normalizedLink = typeof found.link === 'string' 
-          ? { Github: found.link !== '#' ? found.link : '', linkedIn: '' }
-          : { Github: found.link?.Github || '', linkedIn: found.link?.linkedIn || '' };
-        setProject({ ...found, link: normalizedLink })
+        setIsNewProject(true)
       }
     }
     fetchProject()
@@ -130,6 +172,30 @@ export default function ProjectDetailsEditPage({
     }
   }
 
+  const handleDelete = async () => {
+    if (!project) return
+    const confirmed = confirm("Are you sure you want to delete this project?")
+    if (!confirmed) return
+
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/projects?id=${project.id}`, {
+        method: "DELETE",
+      })
+      if (res.ok) {
+        setOpenCard(false)
+        window.location.reload()
+      } else {
+        alert("Failed to delete project")
+      }
+    } catch (err) {
+      console.error(err)
+      alert("Error deleting project")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleCloudinaryUpload = () => {
     // @ts-ignore
     const widget = window.cloudinary.createUploadWidget(
@@ -151,11 +217,12 @@ export default function ProjectDetailsEditPage({
   if (!project) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+    <div ref={overlayRef} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm touch-none">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative h-[85vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-zinc-900 border border-white/20 p-8 text-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+        className="relative h-[85vh] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-2xl bg-zinc-900 border border-white/20 p-8 text-white shadow-2xl"
       >
         <button
           onClick={() => setOpenCard(false)}
@@ -164,7 +231,7 @@ export default function ProjectDetailsEditPage({
           <X size={18} />
         </button>
 
-        <h1 className="text-3xl font-bold mb-6">{id.startsWith('new-') ? 'Add Project' : 'Edit Project'}</h1>
+        <h1 className="text-3xl font-bold mb-6">{isNewProject ? 'Add Project' : 'Edit Project'}</h1>
 
         <div className="space-y-8">
           <section>
@@ -282,13 +349,24 @@ export default function ProjectDetailsEditPage({
           </section>
         </div>
 
-        <button 
-          onClick={handleSave}
-          disabled={loading}
-          className="mt-12 w-full rounded-2xl bg-white text-black py-5 font-black text-lg hover:scale-[0.98] transition-all disabled:opacity-50 shadow-xl shadow-white/5"
-        >
-          {loading ? "SAVING..." : "SAVE CHANGES"}
-        </button>
+        <div className="mt-12 flex gap-4">
+          {!isNewProject && (
+            <button
+              onClick={handleDelete}
+              disabled={loading}
+              className="w-1/3 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/20 py-5 font-black text-lg hover:bg-red-600/30 transition-all disabled:opacity-50"
+            >
+              DELETE
+            </button>
+          )}
+          <button 
+            onClick={handleSave}
+            disabled={loading}
+            className="flex-1 rounded-2xl bg-white text-black py-5 font-black text-lg hover:scale-[0.98] transition-all disabled:opacity-50 shadow-xl shadow-white/5"
+          >
+            {loading ? "SAVING..." : "SAVE CHANGES"}
+          </button>
+        </div>
       </motion.div>
     </div>
   )

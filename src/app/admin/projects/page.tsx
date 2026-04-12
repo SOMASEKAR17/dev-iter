@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { app } from "@/firebase";
 import { motion } from "framer-motion";
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, Plus, ArrowUpDown } from "lucide-react";
 import { type Projects, type Project } from "@/types";
 import ProjectDetailsEditPage from "@/components/custom/ProjectEditCard";
 
@@ -53,6 +53,12 @@ export default function AdminPage() {
     return () => unsubscribe();
   }, [router]);
 
+  const handleAddProject = () => {
+    const newId = `new-${Date.now()}`;
+    setActiveProjectId(newId);
+    setOpenCard(true);
+  };
+
   return (
     <div className="min-h-screen p-8 pt-20 relative bg-black text-white">
       {openCard && activeProjectId && (
@@ -69,13 +75,26 @@ export default function AdminPage() {
       )}
 
       {!checkingAuth && user && (
-        <div>
-          <h2 className="text-2xl font-semibold mb-6 text-white">
-            Projects
-          </h2>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-white">Projects</h2>
+              <p className="text-sm text-gray-500 mt-1 flex items-center gap-1.5">
+                <ArrowUpDown size={12} />
+                Sorted by priority order (lower number = higher priority)
+              </p>
+            </div>
+            <button
+              onClick={handleAddProject}
+              className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-xl font-bold hover:bg-gray-200 transition-all hover:scale-[0.98]"
+            >
+              <Plus size={18} />
+              Add Project
+            </button>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -96,8 +115,14 @@ export default function AdminPage() {
                   hover:bg-zinc-700
                   hover:border-white/20
                   transition
+                  relative
                 "
               >
+                {/* Priority Order Badge */}
+                <div className="absolute -top-2.5 -right-2.5 bg-white text-black text-[10px] font-black w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-black">
+                  {project.order ?? index}
+                </div>
+
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <h2 className="text-xl font-semibold text-white">
@@ -143,9 +168,14 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <p className="mt-4 text-gray-300 leading-relaxed">
+                <p className="mt-4 text-gray-300 leading-relaxed line-clamp-3">
                   {project.description}
                 </p>
+
+                <div className="mt-4 flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase">
+                  <ArrowUpDown size={10} />
+                  Priority: {(project as any).order ?? 0}
+                </div>
               </motion.div>
             ))}
           </div>

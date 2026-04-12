@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {  useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { X } from "lucide-react"
 import {  Github, Linkedin } from "lucide-react"
+import { useLenis } from "lenis/react"
 
 
 interface Project {
@@ -25,6 +26,7 @@ interface Project {
 export default function ProjectDetailsPage({id,setOpenCard}:{id:string,setOpenCard:(i :boolean)=>void}) {
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
 
   const getLinks = (link: Project["link"]) => {
     if (typeof link === "string") {
@@ -48,15 +50,61 @@ export default function ProjectDetailsPage({id,setOpenCard}:{id:string,setOpenCa
     fetchProject()
   }, [id])
 
+  // Stop Lenis smooth scroll while modal is open
+  const lenis = useLenis()
+  useEffect(() => {
+    if (lenis) {
+      lenis.stop()
+    }
+    // Also lock native scroll as a fallback
+    document.documentElement.style.overflow = "hidden"
+    document.body.style.overflow = "hidden"
+    return () => {
+      if (lenis) {
+        lenis.start()
+      }
+      document.documentElement.style.overflow = ""
+      document.body.style.overflow = ""
+    }
+  }, [lenis])
+
+  // Prevent wheel events from reaching Lenis / background
+  useEffect(() => {
+    const overlay = overlayRef.current
+    if (!overlay) return
+
+    const stopWheel = (e: WheelEvent) => {
+      e.stopPropagation()
+    }
+    const stopTouch = (e: TouchEvent) => {
+      e.stopPropagation()
+    }
+
+    overlay.addEventListener("wheel", stopWheel, { passive: false })
+    overlay.addEventListener("touchmove", stopTouch, { passive: false })
+    return () => {
+      overlay.removeEventListener("wheel", stopWheel)
+      overlay.removeEventListener("touchmove", stopTouch)
+    }
+  }, [project])
+
   if (!project) return null
 
   return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-6">
+        <div 
+          ref={overlayRef}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 px-6"
+          onClick={() => {
+              router.push("/projects")
+              setOpenCard(false)
+          }}
+        >
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
+            onClick={(e) => e.stopPropagation()}
             className="
-            relative h-[80vh] scroll-bar overflow-y-scroll
+            relative h-[80vh] scroll-bar overflow-y-auto overscroll-contain
             w-full max-w-5xl rounded-2xl
             bg-black/30 backdrop-blur-3xl
             border border-white/10 shadow-2xl
@@ -155,3 +203,4 @@ export default function ProjectDetailsPage({id,setOpenCard}:{id:string,setOpenCa
         </div>
   )
 }
+
