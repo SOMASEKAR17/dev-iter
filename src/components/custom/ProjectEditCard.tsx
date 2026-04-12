@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { X, Plus, Trash } from "lucide-react"
+import { useLenis } from "lenis/react"
 
 interface Project {
   id: string
@@ -28,10 +29,48 @@ export default function ProjectDetailsEditPage({
 }) {
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
 
   const [loading, setLoading] = useState(false)
   const [newTechKey, setNewTechKey] = useState("")
   const [newTechValue, setNewTechValue] = useState("")
+
+  // Stop Lenis smooth scroll while modal is open
+  const lenis = useLenis()
+  useEffect(() => {
+    if (lenis) {
+      lenis.stop()
+    }
+    document.documentElement.style.overflow = "hidden"
+    document.body.style.overflow = "hidden"
+    return () => {
+      if (lenis) {
+        lenis.start()
+      }
+      document.documentElement.style.overflow = ""
+      document.body.style.overflow = ""
+    }
+  }, [lenis])
+
+  // Prevent wheel events from reaching Lenis / background
+  useEffect(() => {
+    const overlay = overlayRef.current
+    if (!overlay) return
+
+    const stopWheel = (e: WheelEvent) => {
+      e.stopPropagation()
+    }
+    const stopTouch = (e: TouchEvent) => {
+      e.stopPropagation()
+    }
+
+    overlay.addEventListener("wheel", stopWheel, { passive: false })
+    overlay.addEventListener("touchmove", stopTouch, { passive: false })
+    return () => {
+      overlay.removeEventListener("wheel", stopWheel)
+      overlay.removeEventListener("touchmove", stopTouch)
+    }
+  }, [project])
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -151,11 +190,12 @@ export default function ProjectDetailsEditPage({
   if (!project) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+    <div ref={overlayRef} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm touch-none">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative h-[85vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-zinc-900 border border-white/20 p-8 text-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+        className="relative h-[85vh] w-full max-w-5xl overflow-y-auto overscroll-contain rounded-2xl bg-zinc-900 border border-white/20 p-8 text-white shadow-2xl"
       >
         <button
           onClick={() => setOpenCard(false)}
