@@ -11,6 +11,7 @@ export type Project = {
   description: string
   techstack: Record<string, string>
   gallery: string[]
+  order: number
 }
 
 export type Projects = Project[]
