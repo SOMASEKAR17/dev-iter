@@ -23,7 +23,7 @@ const staleCheck = () => {
 
     // Check if new model or new field exists in the current instance
     // @ts-ignore
-    const isStale = !existing.timelineItem || !existing.project;
+    const isStale = !existing.timelineItem || !existing.project || !existing.customPage;
     if (isStale) return true;
 
     return false;
