@@ -36,3 +36,12 @@ model TimelineItem {
   desc  String
   order Int    @default(0)
 }
+
+model CustomPage {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  html      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

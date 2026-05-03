@@ -10,6 +10,7 @@ const navigation = [
   { route: "/admin/projects", name: "Projects", alt: "projects" },
   { route: "/admin/skills", name: "Skills", alt: "skills" },
   { route: "/admin/timeline", name: "Journey", alt: "timeline" },
+  { route: "/admin/pages", name: "Manage Pages", alt: "pages" },
   { route: "/", name: "Exit Admin Panel", alt: "exit" },
 ]
 
